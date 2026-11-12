@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Cue Studio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-icon">K</div>
+        <div>
+            <h1>Cue Studio</h1>
+            <span>Ceremony Control System</span>
+        </div>
+    </div>
+
+    <div class="project-controls">
+        <span id="saveStatus">No project loaded</span>
+        <button id="newProject">New Project</button>
+        <button id="openProject">Open Project</button>
+        <button id="saveProject" class="primary">Save Project</button>
+        <button id="saveProjectAs">Save As</button>
+        <button id="exportProject">Export JSON</button>
+        <input type="file" id="projectFile" accept=".json" hidden>
+    </div>
+</header>
+
+<main class="workspace">
+
+    <!-- LEFT: SCRIPT NAVIGATION -->
+    <aside class="panel scripts-panel">
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">PROJECT STRUCTURE</span>
+                <h2>Scripts</h2>
+            </div>
+            <button id="addScript" class="icon-button">+</button>
+        </div>
+
+        <div id="scriptList" class="script-list"></div>
+
+        <div class="panel-footer">
+            <span id="scriptCount">0 scripts</span>
+            <span id="cueCount">0 cues</span>
+        </div>
+    </aside>
+
+
+    <!-- CENTRE: LIVE PRESENTATION -->
+    <section class="presentation">
+
+        <div class="presentation-header">
+            <div>
+                <span class="eyebrow">LIVE DISPLAY</span>
+                <h2 id="liveScriptTitle">Opening Sequence</h2>
+            </div>
+
+            <div class="presentation-tools">
+                <button id="toggleFullscreen" type="button">Fullscreen</button>
+                <div class="live-font-control" aria-label="Live text font size">
+                    <button id="decreaseLiveFont" type="button" aria-label="Decrease live text size">−</button>
+                    <input
+                        id="liveFontSize"
+                        type="range"
+                        min="20"
+                        max="64"
+                        step="1"
+                        value="32"
+                        aria-label="Live text size"
+                    >
+                    <button id="increaseLiveFont" type="button" aria-label="Increase live text size">+</button>
+                    <strong id="liveFontValue">32px</strong>
+                </div>
+            <div id="liveStatus" class="status">
+                <span class="status-dot"></span>
+                <span class="status-text">READY</span>
+            </div>
+            </div>
+        </div>
+
+        <div class="live-screen">
+
+            <div class="live-top">
+                <span id="liveType" class="type-label">DRUM PERFORMANCE</span>
+                <span id="cuePosition">01 / 01</span>
+            </div>
+
+            <div class="live-content">
+                <span class="current-performance-label">CURRENT PERFORMANCE</span>
+                <div id="livePerformer" class="performer">
+                    Opening drum team
+                </div>
+
+                <div id="liveText" class="live-text">
+                    Welcome to the ceremony.
+                </div>
+
+                <div id="liveNote" class="live-note"></div>
+            </div>
+
+            <div id="upcomingPanel" class="upcoming-panel" aria-live="polite">
+                <span class="upcoming-label">UP NEXT</span>
+                <strong id="upcomingPerformer">END OF PROGRAM</strong>
+                <span id="upcomingDuration" class="upcoming-duration">No upcoming performance</span>
+                <span id="upcomingHint" class="upcoming-hint">Prepare to focus</span>
+            </div>
+
+            <div id="fullscreenSpeedPanel" class="fullscreen-speed-panel">
+                <div class="fullscreen-speed-header">
+                    <span class="eyebrow">PLAYBACK SPEED</span>
+                </div>
+                <div class="fullscreen-speed-row">
+                    <input id="fullscreenSpeedDial" type="range" min="-50" max="50" value="0" aria-label="Playback speed">
+                    <strong id="fullscreenSpeedValue">1.00×</strong>
+                    <button id="fullscreenResetSpeed" type="button" class="mini-button">Reset</button>
+                </div>
+            </div>
+
+            <div class="live-bottom">
+                <div class="countdown-block">
+                    <span class="eyebrow">TIME REMAINING</span>
+                    <h2 id="countdown">00:10</h2>
+                </div>
+
+                <div class="global-timer-block">
+                    <span class="eyebrow">GLOBAL ELAPSED</span>
+                    <h2 id="globalElapsedTime">00:00</h2>
+                </div>
+
+                <div class="progress-area">
+                    <div class="progress-track">
+                        <div id="progressBar"></div>
+                    </div>
+                    <span id="elapsedTime">0s / 10s</span>
+                </div>
+
+                <button id="globalReset" type="button" class="mini-button" aria-label="Reset global elapsed timer">Reset clock</button>
+            </div>
+
+        </div>
+
+
+        <!-- PLAYBACK CONTROLS -->
+        <div class="control-panel">
+
+            <div class="transport">
+                <button id="previousCue">← Previous</button>
+                <button id="playPause" class="primary">▶ Start</button>
+                <button id="nextCue">Next →</button>
+                <button id="restartCue">↺ Restart</button>
+            </div>
+
+            <div class="speed-control">
+                <div class="speed-heading">
+                    <span class="eyebrow">PLAYBACK SPEED</span>
+                    <strong id="speedValue">1.00×</strong>
+                </div>
+
+                <div class="speed-row">
+                    <span>Slow</span>
+                    <input
+                        type="range"
+                        id="speedDial"
+                        min="-50"
+                        max="50"
+                        value="0"
+                    >
+                    <span>Fast</span>
+                    <button id="resetSpeed">Reset</button>
+                </div>
+
+                <small>
+                    Drag to adjust speed. Release to return the dial to centre.
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- RECOVERY MARKERS -->
+        <div class="marker-panel">
+            <div class="panel-header">
+                <div>
+                    <span class="eyebrow">QUICK RECOVERY</span>
+                    <h3>Saved timing markers</h3>
+                </div>
+            </div>
+
+            <div id="markerList" class="marker-list"></div>
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT: SCRIPT EDITOR -->
+    <aside class="panel editor-panel">
+
+        <div class="panel-header">
+            <div>
+                <span class="eyebrow">CONTENT MANAGEMENT</span>
+                <h2>Script Editor</h2>
+            </div>
+
+            <button id="deleteScript" class="icon-button danger">
+                ×
+            </button>
+        </div>
+
+        <div class="editor-content">
+
+            <label>
+                Project title
+                <input id="projectTitle" type="text">
+            </label>
+
+            <label>
+                Script title
+                <input id="scriptTitle" type="text">
+            </label>
+
+            <label>
+                Script type
+                <select id="scriptType">
+                    <option value="drum">Drum Performance</option>
+                    <option value="chant">Kavi</option>
+                    <option value="group">Everyone</option>
+                    <option value="custom">Custom Cue</option>
+                </select>
+            </label>
+
+            <div class="editor-divider"></div>
+
+            <div class="cue-heading">
+                <h3>Cues / Sentences</h3>
+                <button id="addCue">+ Add Cue</button>
+            </div>
+
+            <div id="cueEditorList"></div>
+
+        </div>
+
+    </aside>
+
+</main>
+
+<footer>
+    <span>Offline-first application · Cue Studio</span>
+    <span>Foundation v0.1</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

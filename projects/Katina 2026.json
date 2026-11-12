@@ -1,0 +1,411 @@
+{
+  "title": "Manual Save Test",
+  "settings": {},
+  "scripts": [
+    {
+      "id": "s",
+      "title": "බුද්ධං සිවං සිරිධරං",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "c",
+          "text": "Hak & Drum Roll",
+          "performer": "Everyone",
+          "duration": 12,
+          "mode": "auto",
+          "marker": null,
+          "note": ""
+        },
+        {
+          "id": "bf5946fd-1e83-4d65-8dc9-265df48868e1",
+          "text": "බුද්ධං සිවං සිරිධරං - ගුරුසිද්ධ ලෝකං\nඤාණං ච සෙට්ඨ මනසං - මුණි ධම්ම රාජං\nසුද්ධං ච ධම්ම මධුරං - සරණං ති ලෝකං\nපූජේමි ජීවිතමහං - සහ භේරි සද්ධං\n",
+          "performer": "Everyone",
+          "note": "",
+          "duration": 76,
+          "mode": "auto",
+          "marker": 1
+        },
+        {
+          "id": "3ddc06eb-3e97-48f8-af5c-7f66fb56fce4",
+          "text": "Yak Bera Roll & Hak",
+          "performer": "Yak Bera 2 & Abeetha",
+          "note": "",
+          "duration": 8,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "ab7895d5-a4c5-4258-ac5f-08c8d716db3d",
+          "text": "සක්වල දස දහසකට, කෝටි ලක්ෂයක් සක්වලට, අප ධර්ම රාජෝත්තම...\nඑදා දීපංකර මුණි පාමුල වැතිර, තම නිවන අතහැර...",
+          "performer": "Praveen",
+          "note": "In Between Yak Bera Plays in low sound",
+          "duration": 16,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "c29f799c-a365-43c5-b19c-0e355afad0f3",
+          "text": "යටින් අවීතියද, උඩින් භවාග්‍රයද, වටින් සක්වලද\nසියලු ලෝ සතුන් එතෙර කිරීමේ මහා අදිටනින්, නියත විවරණ ලැබ...\nචතුර සංඛ්‍ය කල්ප ලක්ෂයක්, මහා පාරමී දම් පුරනු වස්, සසර සයුරට පැන...\nකලෙක බඹෙක්ව සුරෙක්ව සක්විති රජෙක්ව, ලෝ සතට වෙදෙක්ව, පියෙක්ව...\nසකලවිධ සියලු සම්පත්, තණ පතක් සේ අතහැර,\nතවුසෙක්ව, මහණෙක්ව, වනයට වැද...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 29,
+          "mode": "auto",
+          "marker": 2
+        },
+        {
+          "id": "a782a185-b125-4463-8a7c-14fed23e2981",
+          "text": "තවද ජාතීන්හී, මහා වඳුරු අත්බවයක, සා අත්බැවයක, මුව අත්බැවයක\nලේ මස් ජීවිත දන් දී, වටු අත්බැවයක සිට, සත්‍ය ක්‍රියා ආදී කොට...\nඅප්‍රමාණ අත් භවයන්හි, අප්‍රමාණ දුක් විඳ, අප්‍රමාණ වාරයක්, ජීවිත පූජා කොට\nගුණදම් පුරා පතුරවා, මහා මෙත් සිසිල් පතුරවා, දාන සීල භාවනා පෙරටු\nකොට...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 22,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "c469fe16-dedc-4f2b-b59c-ecff1e7a667f",
+          "text": "පාරමී, උපපාරමී, පරමත්ථ පාරමී, සමතිස් පෙරුම්දම් බල නගා\nපශ්චිම අත්භවයට පැමිණ, ශ්‍රේෂ්ඨ සීහ නාද කොට...\nසා වසක් දුෂ්කර ක්‍රියා කොට, අවසන ජය ශ්‍රී විජය ශ්‍රී මහා බෝ මැඩ\nපුර්ණ චන්ද්‍ර කලා, සෞ ම්‍ය පසළොස්වක් පෝදා, මැදියම් රැයේ තනිව...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 21,
+          "mode": "auto",
+          "marker": 3
+        },
+        {
+          "id": "6a0d12a5-f879-4fac-b2d0-11ba002a1eff",
+          "text": "දිව්‍ය මාර, පංච මාර, දස මාර, පරිවාර මාර සේනා\nතම දක්ඛිණ හස්තයේ අංගුලිකාවෙන්, පොළෝමහී කාන්තාව සපත කොට\nතම පාරමී සත්‍යයක් ක්‍රියා බලයෙන් පරදවා...\nමහ පොළොව ගුගුරුවා, පුපුරවා, මහමෙර සසල කොට, සයුර නිසල කොට...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 15,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "95952150-574f-4af1-8ee5-5257d6ddb2a4",
+          "text": "වින බන්ධන, හිර බන්ධන, යන්ත්‍ර මන්ත්‍ර හිර වැළැක්කුං, ඉගිල පිපිර කපාල\nඡේදන කොට\nලෝක ධාතු, විශ්ව ධාතු, සක්වල ධාතු, කම්පා කොට...\nඅෂ්ට සමාපත්ති බල පරදවා, අනන්ත සක්වලට සවනක් ගණ රශ්මිමාලා වන්\nවිහිදුවා පතුරවා...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 18,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "dfef9ff4-ce9f-436c-8354-19191fabaf51",
+          "text": "සර්වඥ පද ප්‍රාප්ත ව, ෂඩ් අසාධාරණ ඥාන උපදවා...\nඅප මහා නර සීහයාණෝ, සම්මා සම්බුද්ධ රාජ්‍යය උරුම කරගත් සේක...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 12,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "06fafdec-849f-4d86-a4b1-631852a87417",
+          "text": "Yak Bera Roll & Hak",
+          "performer": "Hak & Yak Bera 2",
+          "note": "",
+          "duration": 9,
+          "mode": "auto",
+          "marker": 4
+        },
+        {
+          "id": "7fe089cc-1ab5-45c4-9849-65a906e8c6cc",
+          "text": "මගේ බුදු අප්පොච්චි, එතැන් පටන් විශ්වයට සම වැද...\nසතර සතිපට්ඨානයෝය, සතර සම්‍යක් ප්‍රදානයෝය,\nසතර ඉර්දිපාදයෝය, පංචේන්ද්‍රීයෝය, පංච බලයෝය...\nසප්ත බොජ්ජංගයෝය, ආර්ය අෂ්ඨාං ගික මාර්ගයෝය,\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 16,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "7e14d61b-5d4a-4e73-9c56-0f97fc6bf61c",
+          "text": "ආදී කොට ඇති විශ්වයේ සත්‍ය අස්සක් මුල්ලක් නෑර, අවබෝධ කොට...\nඅමා දම් බල නගා, කන් කලු වූ, ශ්‍රී මුඛ පද්මය විවරකොට, සද්ධර්ම චක්‍රය\nප්‍රවර්තනය කොට...\nදහම් සකේ ආශ්චර්‍යය, ලෝක ධාතු පරදවා, සක්වළ ගල පරදවා, කෝටි ලක්ෂයක්\nසක්වල,\nසූ විසි අසංඛය සත්ත්ව සමූහයාගේ, සිත් සුවපත් කල බව සත්‍ය යි...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 17,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "242e0b48-42da-44ac-94f2-8f1bd1398096",
+          "text": "එම ආශ්චර්‍ය, අප දෙනෙතට නොපෙනෙන, දිවැසට පෙනෙන, දෙව් බඹුන් සාක්ෂි\nදරන්නේමය...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 8.5,
+          "mode": "auto",
+          "marker": 5
+        },
+        {
+          "id": "6c5b90bf-f27f-4ccf-b138-53efe8cbec64",
+          "text": "ධර්මයේ ආනුභාවය කෙසේදයත්,\nඑදා මධ්‍යම රාත්‍රි යාමයේ, මුලු අහස් කුස ඒකලෝක කොට...\nජේතවනයට සකල දෙව් බඹුන් වැඩියා මෙන්, අදද මේ ජේතවනයට, මේ උතුම්\nභූමියට, මේ පිරිත් ශ්‍රවණයට, ඔවුන් රැස් වෙනවා සත්‍යමයි, ආයු බෝ....\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 19,
+          "mode": "auto",
+          "marker": 6
+        },
+        {
+          "id": "5cb8efc8-cc2c-4011-a31c-33168fd08bb0",
+          "text": "මෙතැන් පටන් කෙරෙන්නා වූ ශ්‍රී මුඛ බුද්ධ දේශනාවේ, ආඤ්ඤාව ආනුභාවය\nකෙසේදයත්,\nමේ භූමියේ පටන් වන්නා වූ, ගම් දන්ව් සිසාරා, රටේ ලෝකයේ...\nලෝක ධාතූන් හි, සක්වල ධාතූන් හි, අසංඛය අප්‍රමේය වූ, සියලු ලෝක සකල\nසත්ත්වයන්ගේ...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 14,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "5617c091-33a4-4712-8183-cc94a980db44",
+          "text": "අඳුර දුරලා, වින නසා, හිර නසා, පව් නසා, සකල රෝගපීඩා දුරු කරවා...\nසබ්බ බන්ධන උගුලුවා,භංග කරවා, කල එලි වී ආලෝක වී...\nගුණ පුරා, පින් පුරා, සුවපත්ව, අමා නම් වූ නිවන ලැබ,\nසුවපත් වන්නට ආසිරි... ආ...\n",
+          "performer": "Praveen",
+          "note": "",
+          "duration": 19,
+          "mode": "auto",
+          "marker": 7
+        },
+        {
+          "id": "16b11c68-fe0a-4123-b2bd-5ac81fe15853",
+          "text": "Yak Bera Roll & Hak",
+          "performer": "Yak Bera 2 & Abeetha",
+          "note": "",
+          "duration": 9,
+          "mode": "auto",
+          "marker": 8
+        }
+      ]
+    },
+    {
+      "id": "b6ab1061-cc4f-4f04-b7d6-071903cb754e",
+      "title": "කවි තාලය 1",
+      "type": "chant",
+      "cues": [
+        {
+          "id": "b57413bd-2793-4fde-b5a8-1d38020a2560",
+          "text": "පිරුණු පා රමී බල ගෙ න සිත අදිටන් කො ට\nවැ ඩුණු විජය සිරිමහ බෝ වජිරා සන සිට\nවැ දුණු මා ර සේ නා බල සීලගුණෙ න් බට\nපිරිණු ඤා ණයෙන් බෝ සත් බුදුබව අත්කො ට\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "",
+          "duration": 47,
+          "mode": "auto",
+          "marker": 9
+        },
+        {
+          "id": "f6ddc5d2-0fd5-4ce3-afda-a83a47d865f0",
+          "text": "වැ ඩුණු සිතේ සමයෙ න් හිමි සක්වල ලෝ වට\nබැ ඳුණු පරම පිවිතුරු සිරි දම් කඳ එක් කො ට\nමැ කුණු වළා වෙ න් මිදෙ නා සඳ සෙ උදා කො ට\nබැ ඳුණු සත්වයන් සො යමින් කරුණාවෙ න් බට\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "",
+          "duration": 48,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "5b56d6f7-ad9b-4311-9b2f-98dd61a54bc3",
+          "text": "වැ ඩුණු පිනේ ගුණයෙන් පිරි මනු ලෝ සත්නට\nබැ ඳුණු යදම් වන් කෙ ලෙ සුන් සුන්කර නස්නට\nදිළුණු දහම් ෂඩ් රශ්මිය විහිදා ලෝ වට\nබැ ඳුණු සත්ත්වයන් පැ මිනෙ ති දම් පද අස්නට\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "Next Beat Changes & Tempo +",
+          "duration": 49,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "1e014e34-cbc0-43c3-8f13-6c9e55e7f75b",
+      "title": "කවි තාලය 2",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "686466b8-5b8f-40bd-b84f-f59677b03b45",
+          "text": "දිව්‍ය ධරණි අධිපති මහ සක්දෙ ව් රජ බැ ස\nසතර රජුන් වරම් ලබා සතර දො රටු සිට ආ....\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "",
+          "duration": 14.5,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "a98c0fe7-3fd4-49f5-95cb-9e254b4903bc",
+          "text": "දැ ඩිමුඩ දෙ වි සමග වඩින යක්ඛ පිරිස වට\nඅචල මෙ රුව සො ලවා ගෙ න නා රජවරු එන ආ....\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "",
+          "duration": 14.5,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "9d20ff2f-416a-4bb6-8780-2152a26c4e6e",
+          "text": "සාසන ගැ ති උරුම රකින අෂ්ටව බහිරව\nභූත යකුන් දමනය වී කරදිය රැස් වට ආ....\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "",
+          "duration": 14.5,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "2dd2d11b-c966-4196-bdd3-3f4e8c859e3b",
+          "text": "භූමා ටුව පටන් විහිද සක්වල අනතක\nපිරිත අසන්නට රැස්වනු ආසිරි නිවනට ආ....\n",
+          "performer": "Praveen , Yak Bera , Thalampata & Hak",
+          "note": "",
+          "duration": 14.5,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "2a924f15-84c2-44d5-857b-8f9a1d8d1fd1",
+      "title": "සව් සරා.....",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "bc7cd56f-dabc-499e-8bee-79d2ee209414",
+          "text": "සව් සරා සතට ලැබෙන නිවන අතහැරා සුමේධ\nලොව්තුරා මුණිදු නමට සිරුර පුද කරා...\nසසර සැරිසරා කතර නිතර පෙරුම් දම් පුරා \nමුණිදු ලොව්තුරා.... පළමු වදිම් හිතපුරා.....\n",
+          "performer": "Everyone",
+          "note": "",
+          "duration": 27,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "565973ef-2c0d-476a-b98a-9db9b16def95",
+          "text": "ගිනි සැරේ… ගිනි සැරේ.. නොදැන පනින පළගැටී ලෙසින්\nමෙසසරේ ඇලිලා ගැලිලා සිටින සව්සතුන් \nඅනදරේ අරිය මුණිදු දහමෙ අනුහසින්\nසව්සත  අවසරේ.. දෙවනු වදිමි ධර්ම රත්නයෙන්\n",
+          "performer": "Everyone",
+          "note": "",
+          "duration": 27,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "bfb8df34-de3a-4667-9142-80c9c0fee6f9",
+          "text": "මුණිපුතුන්…මුණිපුතුන්…අනද නන්ද සාරිපුත්ත නම්\nතෙරුන් ගුන උතුම්… කසප මුණිදු අඟුන් මහ තෙරුන්\nමරු රුපුන් සසර බින්ද කෙලෙස් සුරගුවන්\nමෙදැන් සංඝරත්නෙ පැහැද වැන්දෙ අවසරයි ඉතින්…///\n",
+          "performer": "Everyone",
+          "note": "Beaware...!  Praveen Moves Back to the ARC.",
+          "duration": 37,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "655be3d3-5a5f-4889-9d66-49c2c293c4f8",
+      "title": "Puja Padaya",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "a193b327-a3c9-4a0f-86f0-870002b4056d",
+          "text": "Yak Bera",
+          "performer": "Yak Bera 2",
+          "note": "",
+          "duration": 60,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "c2d71800-1652-4ce1-82a3-9c8a3e44ff2e",
+      "title": "1st Wattama",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "fcf78840-f1f5-431a-8630-ff7a2d2958ad",
+          "text": "Hewisi",
+          "performer": "Hewisi Team",
+          "note": "",
+          "duration": 76,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "32e9fea7-434a-4e10-82ed-4866e1988f96",
+          "text": "Gata Bera",
+          "performer": "Gata Bera",
+          "note": "",
+          "duration": 99,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "31555920-b9e0-44ae-981c-7c10c31a381c",
+          "text": "Yak Bera 2nd Wattama",
+          "performer": "Yak Bera 2",
+          "note": "",
+          "duration": 51,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "c6d419d3-3f98-462e-9cfe-5f41d270bf67",
+      "title": "2st Wattama",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "aed25ddf-e384-4ce4-b400-c828368ef316",
+          "text": "Hewisi 2nd Wattama",
+          "performer": "Hewisi Team",
+          "note": "",
+          "duration": 94,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "13ea4de9-dfb9-4f77-aceb-72fc55fecb0e",
+          "text": "Gata Bera 2nd Wattama",
+          "performer": "Gata Bera 2",
+          "note": "",
+          "duration": 97,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "b67213da-dcae-467a-b36e-41aeb3852424",
+          "text": "Yak bera 2nd Wattama",
+          "performer": "Yak Bera 2",
+          "note": "",
+          "duration": 49,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "38996935-9740-4a63-ad0c-fd0427073f40",
+      "title": "3rd Wattama",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "8af3171f-6662-4bbc-a38b-8fb08160d8e8",
+          "text": "Hewisi 3rd Wattama",
+          "performer": "Hewisi Team",
+          "note": "",
+          "duration": 104,
+          "mode": "auto",
+          "marker": null
+        },
+        {
+          "id": "9d726569-4d5d-49b1-b670-414dee57ab9e",
+          "text": "Gata Bera 3rd Wattama",
+          "performer": "Gata Bera 2",
+          "note": "",
+          "duration": 39,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    },
+    {
+      "id": "301e00ad-2100-44df-b02e-df084b191de2",
+      "title": "Hamara Padaya",
+      "type": "custom",
+      "cues": [
+        {
+          "id": "96e51f65-2bd7-4622-835f-9a325e4047fd",
+          "text": "Hamara Padaya",
+          "performer": "Hewisi Team",
+          "note": "",
+          "duration": 26,
+          "mode": "auto",
+          "marker": null
+        }
+      ]
+    }
+  ]
+}
