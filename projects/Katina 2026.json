@@ -1,5 +1,5 @@
 {
-  "title": "Manual Save Test",
+  "title": "Katina 2026",
   "settings": {},
   "scripts": [
     {
@@ -14,7 +14,8 @@
           "duration": 12,
           "mode": "auto",
           "marker": null,
-          "note": ""
+          "note": "",
+          "upcomingColor": null
         },
         {
           "id": "bf5946fd-1e83-4d65-8dc9-265df48868e1",
@@ -23,7 +24,8 @@
           "note": "",
           "duration": 76,
           "mode": "auto",
-          "marker": 1
+          "marker": 1,
+          "upcomingColor": null
         },
         {
           "id": "3ddc06eb-3e97-48f8-af5c-7f66fb56fce4",
@@ -32,7 +34,8 @@
           "note": "",
           "duration": 8,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#E53935"
         },
         {
           "id": "ab7895d5-a4c5-4258-ac5f-08c8d716db3d",
@@ -41,7 +44,8 @@
           "note": "In Between Yak Bera Plays in low sound",
           "duration": 16,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#43A047"
         },
         {
           "id": "c29f799c-a365-43c5-b19c-0e355afad0f3",
@@ -50,7 +54,8 @@
           "note": "",
           "duration": 29,
           "mode": "auto",
-          "marker": 2
+          "marker": 2,
+          "upcomingColor": null
         },
         {
           "id": "a782a185-b125-4463-8a7c-14fed23e2981",
@@ -59,7 +64,8 @@
           "note": "",
           "duration": 22,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "c469fe16-dedc-4f2b-b59c-ecff1e7a667f",
@@ -68,7 +74,8 @@
           "note": "",
           "duration": 21,
           "mode": "auto",
-          "marker": 3
+          "marker": 3,
+          "upcomingColor": null
         },
         {
           "id": "6a0d12a5-f879-4fac-b2d0-11ba002a1eff",
@@ -77,7 +84,8 @@
           "note": "",
           "duration": 15,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "95952150-574f-4af1-8ee5-5257d6ddb2a4",
@@ -86,7 +94,8 @@
           "note": "",
           "duration": 18,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "dfef9ff4-ce9f-436c-8354-19191fabaf51",
@@ -95,7 +104,8 @@
           "note": "",
           "duration": 12,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "06fafdec-849f-4d86-a4b1-631852a87417",
@@ -104,7 +114,8 @@
           "note": "",
           "duration": 9,
           "mode": "auto",
-          "marker": 4
+          "marker": 4,
+          "upcomingColor": "#E53935"
         },
         {
           "id": "7fe089cc-1ab5-45c4-9849-65a906e8c6cc",
@@ -113,7 +124,8 @@
           "note": "",
           "duration": 16,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "7e14d61b-5d4a-4e73-9c56-0f97fc6bf61c",
@@ -122,7 +134,8 @@
           "note": "",
           "duration": 17,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "242e0b48-42da-44ac-94f2-8f1bd1398096",
@@ -131,7 +144,8 @@
           "note": "",
           "duration": 8.5,
           "mode": "auto",
-          "marker": 5
+          "marker": 5,
+          "upcomingColor": null
         },
         {
           "id": "6c5b90bf-f27f-4ccf-b138-53efe8cbec64",
@@ -140,7 +154,8 @@
           "note": "",
           "duration": 19,
           "mode": "auto",
-          "marker": 6
+          "marker": 6,
+          "upcomingColor": null
         },
         {
           "id": "5cb8efc8-cc2c-4011-a31c-33168fd08bb0",
@@ -149,7 +164,8 @@
           "note": "",
           "duration": 14,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "5617c091-33a4-4712-8183-cc94a980db44",
@@ -158,7 +174,8 @@
           "note": "",
           "duration": 19,
           "mode": "auto",
-          "marker": 7
+          "marker": 7,
+          "upcomingColor": null
         },
         {
           "id": "16b11c68-fe0a-4123-b2bd-5ac81fe15853",
@@ -167,7 +184,8 @@
           "note": "",
           "duration": 9,
           "mode": "auto",
-          "marker": 8
+          "marker": 8,
+          "upcomingColor": "#E53935"
         }
       ]
     },
@@ -183,7 +201,8 @@
           "note": "",
           "duration": 47,
           "mode": "auto",
-          "marker": 9
+          "marker": 9,
+          "upcomingColor": null
         },
         {
           "id": "f6ddc5d2-0fd5-4ce3-afda-a83a47d865f0",
@@ -192,7 +211,8 @@
           "note": "",
           "duration": 48,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "5b56d6f7-ad9b-4311-9b2f-98dd61a54bc3",
@@ -201,7 +221,8 @@
           "note": "Next Beat Changes & Tempo +",
           "duration": 49,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#43A047"
         }
       ]
     },
@@ -217,7 +238,8 @@
           "note": "",
           "duration": 14.5,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "a98c0fe7-3fd4-49f5-95cb-9e254b4903bc",
@@ -226,7 +248,8 @@
           "note": "",
           "duration": 14.5,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "9d20ff2f-416a-4bb6-8780-2152a26c4e6e",
@@ -235,7 +258,8 @@
           "note": "",
           "duration": 14.5,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#43A047"
         },
         {
           "id": "2dd2d11b-c966-4196-bdd3-3f4e8c859e3b",
@@ -244,7 +268,8 @@
           "note": "",
           "duration": 14.5,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         }
       ]
     },
@@ -260,7 +285,8 @@
           "note": "",
           "duration": 27,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "565973ef-2c0d-476a-b98a-9db9b16def95",
@@ -269,7 +295,8 @@
           "note": "",
           "duration": 27,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "bfb8df34-de3a-4667-9142-80c9c0fee6f9",
@@ -278,7 +305,8 @@
           "note": "Beaware...!  Praveen Moves Back to the ARC.",
           "duration": 37,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#FDD835"
         }
       ]
     },
@@ -294,7 +322,8 @@
           "note": "",
           "duration": 60,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#E53935"
         }
       ]
     },
@@ -310,7 +339,8 @@
           "note": "",
           "duration": 76,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#FFFFFF"
         },
         {
           "id": "32e9fea7-434a-4e10-82ed-4866e1988f96",
@@ -319,7 +349,8 @@
           "note": "",
           "duration": 99,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "31555920-b9e0-44ae-981c-7c10c31a381c",
@@ -328,7 +359,8 @@
           "note": "",
           "duration": 51,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         }
       ]
     },
@@ -344,7 +376,8 @@
           "note": "",
           "duration": 94,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "13ea4de9-dfb9-4f77-aceb-72fc55fecb0e",
@@ -353,7 +386,8 @@
           "note": "",
           "duration": 97,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "b67213da-dcae-467a-b36e-41aeb3852424",
@@ -362,7 +396,8 @@
           "note": "",
           "duration": 49,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         }
       ]
     },
@@ -378,7 +413,8 @@
           "note": "",
           "duration": 104,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         },
         {
           "id": "9d726569-4d5d-49b1-b670-414dee57ab9e",
@@ -387,7 +423,8 @@
           "note": "",
           "duration": 39,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": null
         }
       ]
     },
@@ -403,7 +440,8 @@
           "note": "",
           "duration": 26,
           "mode": "auto",
-          "marker": null
+          "marker": null,
+          "upcomingColor": "#E53935"
         }
       ]
     }

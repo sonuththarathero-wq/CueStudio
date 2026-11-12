@@ -519,26 +519,28 @@ button.primary {
     font-size: 26px;
     margin: 5px 0;
     transform-origin: left center;
-    transition: color 100ms linear, text-shadow 100ms linear;
+    transition: color 180ms ease, text-shadow 180ms ease;
+}
+
+#countdown.is-warning {
+    animation: countdown-warning-pulse 1.25s ease-in-out infinite;
+}
+
+#countdown.is-warning:not(.is-running):not(.is-completed) {
+    animation-play-state: paused;
 }
 
 #countdown.is-zero {
-    animation: countdown-zero-pulse 1.35s ease-in-out infinite;
+    font-weight: 800;
 }
 
-@keyframes countdown-zero-pulse {
+@keyframes countdown-warning-pulse {
     0%, 100% {
         transform: scale(1);
-        text-shadow:
-            0 0 15px rgba(255, 35, 45, 0.85),
-            0 0 30px rgba(255, 20, 35, 0.6);
     }
 
     50% {
-        transform: scale(1.055);
-        text-shadow:
-            0 0 25px rgba(255, 35, 45, 1),
-            0 0 46px rgba(255, 20, 35, 0.8);
+        transform: scale(var(--countdown-pulse-scale, 1.04));
     }
 }
 
@@ -1509,5 +1511,678 @@ body.app-fullscreen #globalReset {
 
     body.app-fullscreen #globalReset {
         min-height: 36px;
+    }
+}
+
+.presenter-body {
+    display: flex;
+    flex: 1 1 0;
+    gap: 10px;
+    min-height: 0;
+    position: relative;
+}
+
+.presenter-body > .live-screen {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.presenter-header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.global-time {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.global-time strong {
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    font-size: 15px;
+}
+
+.global-time .mini-button {
+    padding: 4px 7px;
+    font-size: 10px;
+}
+
+.status.is-live {
+    color: #ff7777;
+}
+
+.fullscreen-marker-sidebar,
+.fullscreen-speed-panel,
+.fullscreen-playback-controls {
+    display: none;
+}
+
+#toggleMarkerSidebar {
+    display: none;
+}
+
+.upcoming-content {
+    min-width: 0;
+}
+
+.confirmation-dialog[hidden] {
+    display: none;
+}
+
+.confirmation-dialog {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(3, 10, 16, 0.76);
+    backdrop-filter: blur(5px);
+}
+
+.confirmation-card {
+    width: min(100%, 420px);
+    padding: 22px;
+    border: 1px solid #315064;
+    border-radius: 14px;
+    background: #111b26;
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
+}
+
+.confirmation-card h2 {
+    margin: 0 0 10px;
+    font-size: 19px;
+}
+
+.confirmation-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 20px;
+}
+
+body.app-fullscreen .workspace {
+    padding: 8px;
+}
+
+body.app-fullscreen .presentation {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    gap: 7px;
+}
+
+body.app-fullscreen .presentation-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    min-height: 54px;
+    padding: 0 4px;
+}
+
+body.app-fullscreen .presenter-heading {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    align-self: center;
+}
+
+body.app-fullscreen .presenter-heading .eyebrow {
+    display: none;
+}
+
+body.app-fullscreen .presenter-header-center {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    min-width: max-content;
+}
+
+body.app-fullscreen .global-time {
+    gap: 8px;
+}
+
+body.app-fullscreen .global-time strong {
+    font-size: 17px;
+}
+
+body.app-fullscreen .global-time .eyebrow {
+    display: inline;
+    font-size: 8px;
+}
+
+body.app-fullscreen .global-time .mini-button {
+    min-height: 30px;
+    padding: 4px 7px;
+}
+
+body.app-fullscreen .presenter-header-center .status {
+    justify-content: center;
+    line-height: 1;
+}
+
+body.app-fullscreen .presentation-header h2 {
+    max-width: 100%;
+    font-size: 14px;
+}
+
+body.app-fullscreen .presentation-tools {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    gap: 6px;
+}
+
+body.app-fullscreen .presentation-tools > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 6px 9px;
+    font-size: 11px;
+}
+
+body.app-fullscreen #toggleMarkerSidebar {
+    display: inline-flex;
+}
+
+body.app-fullscreen #toggleMarkerSidebar {
+    min-width: 58px;
+}
+
+body.app-fullscreen #toggleFullscreen {
+    min-width: 48px;
+}
+
+body.app-fullscreen .presenter-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+}
+
+body.app-fullscreen .live-screen {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    gap: clamp(5px, 0.9vh, 10px);
+    min-height: 0;
+    padding: clamp(8px, 1.2vw, 16px);
+}
+
+body.app-fullscreen .live-screen::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(82, 5, 14, 0.08) 0%,
+            rgba(63, 0, 8, 0.12) 34%,
+            rgba(108, 6, 18, 0.4) 72%,
+            rgba(153, 17, 33, 0.76) 100%
+        ),
+        radial-gradient(
+            ellipse at center,
+            rgba(255, 25, 42, 0) 48%,
+            rgba(255, 32, 48, 0.22) 100%
+        );
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transition: none;
+}
+
+body.app-fullscreen .live-screen.countdown-warning::before {
+    opacity: var(--countdown-warning-intensity, 0);
+    transition: opacity 240ms ease-out;
+}
+
+body.app-fullscreen .live-screen > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.app-fullscreen .upcoming-panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: stretch;
+    min-height: 84px;
+    max-height: 112px;
+    padding: 7px 14px;
+}
+
+body.app-fullscreen .upcoming-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    min-height: 0;
+}
+
+body.app-fullscreen .upcoming-panel strong {
+    max-height: 2.4em;
+    font-size: clamp(16px, 1.65vw, 22px);
+    line-height: 1.2;
+    text-align: left;
+}
+
+body.app-fullscreen .upcoming-panel strong.end-of-program {
+    font-size: 16px;
+}
+
+body.app-fullscreen .upcoming-duration {
+    margin: 0;
+    font-size: clamp(22px, 2.5vw, 34px);
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    line-height: 1;
+    text-align: right;
+    white-space: nowrap;
+}
+
+body.app-fullscreen .upcoming-panel.end-of-program .upcoming-duration {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+body.app-fullscreen .upcoming-hint {
+    display: none;
+}
+
+body.app-fullscreen .live-bottom {
+    display: grid;
+    grid-template-columns: minmax(90px, 0.2fr) minmax(0, 1fr) minmax(60px, auto);
+    align-items: center;
+    gap: 12px;
+    padding: 2px 4px;
+}
+
+body.app-fullscreen .countdown-block {
+    min-width: 0;
+}
+
+body.app-fullscreen .live-bottom .eyebrow {
+    font-size: 9px;
+}
+
+body.app-fullscreen #countdown {
+    margin: 2px 0 0;
+    font-size: clamp(28px, 3vw, 38px);
+    line-height: 1;
+}
+
+body.app-fullscreen .progress-area {
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+body.app-fullscreen .progress-track {
+    height: 9px;
+    margin: 0;
+}
+
+body.app-fullscreen .queue-progress-label {
+    color: var(--muted);
+    font-size: 11px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+body.app-fullscreen .fullscreen-marker-sidebar {
+    display: none;
+}
+
+body.app-fullscreen.markers-open .presenter-body {
+    grid-template-columns: minmax(0, 1fr) minmax(170px, 220px);
+}
+
+body.app-fullscreen.markers-open .fullscreen-marker-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel);
+}
+
+.fullscreen-marker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.fullscreen-marker-header h3 {
+    margin: 4px 0 0;
+    font-size: 13px;
+}
+
+.fullscreen-marker-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    padding-top: 8px;
+    overflow-y: auto;
+}
+
+.fullscreen-marker-list .marker {
+    width: 100%;
+    min-height: 40px;
+    padding: 7px;
+}
+
+body.app-fullscreen .fullscreen-speed-panel {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    margin: 0;
+    padding: 4px 10px;
+    border: 1px solid rgba(53, 197, 213, 0.35);
+    border-radius: 10px;
+    background: rgba(13, 27, 38, 0.75);
+}
+
+body.app-fullscreen .fullscreen-speed-panel > .eyebrow {
+    display: block;
+    white-space: nowrap;
+}
+
+body.app-fullscreen .fullscreen-speed-panel input {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    margin: 0;
+    accent-color: var(--accent);
+    touch-action: pan-x;
+}
+
+body.app-fullscreen .fullscreen-speed-panel strong {
+    color: var(--accent);
+    font-size: 17px;
+    white-space: nowrap;
+}
+
+body.app-fullscreen #fullscreenResetSpeed {
+    min-width: 92px;
+    min-height: 40px;
+    padding: 6px 9px;
+    font-size: 11px;
+}
+
+#speedDial,
+#fullscreenSpeedDial {
+    accent-color: #43A047;
+}
+
+body.app-fullscreen .fullscreen-playback-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+body.app-fullscreen .fullscreen-playback-controls button {
+    min-width: 0;
+    min-height: 46px;
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+body.app-fullscreen .fullscreen-playback-controls button:disabled {
+    opacity: 0.48;
+    cursor: default;
+}
+
+@media (max-width: 850px) {
+    body.app-fullscreen .presenter-body,
+    body.app-fullscreen.markers-open .presenter-body {
+        display: block;
+    }
+
+    body.app-fullscreen.markers-open .fullscreen-marker-sidebar {
+        position: absolute;
+        z-index: 5;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: min(58vw, 290px);
+        box-shadow: -12px 0 35px rgba(0, 0, 0, 0.45);
+    }
+
+    body.app-fullscreen .live-screen {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    body.app-fullscreen .workspace {
+        padding: 4px;
+    }
+
+    body.app-fullscreen .presentation {
+        gap: 5px;
+    }
+
+    body.app-fullscreen .presentation-header {
+        min-height: 54px;
+        padding: 0 2px;
+    }
+
+    body.app-fullscreen .presentation-header h2 {
+        font-size: 12px;
+    }
+
+    body.app-fullscreen .presentation-tools {
+        gap: 4px;
+    }
+
+    body.app-fullscreen .presentation-tools > button {
+        min-height: 36px;
+        padding: 5px 6px;
+        font-size: 10px;
+    }
+
+    body.app-fullscreen #toggleMarkerSidebar {
+        min-width: 48px;
+        padding-right: 4px;
+        padding-left: 4px;
+        font-size: 9px;
+    }
+
+    body.app-fullscreen #toggleFullscreen {
+        min-width: 42px;
+        padding-right: 4px;
+        padding-left: 4px;
+        font-size: 9px;
+    }
+
+    body.app-fullscreen .global-time {
+        gap: 4px;
+    }
+
+    body.app-fullscreen .global-time strong {
+        font-size: 14px;
+    }
+
+    body.app-fullscreen .global-time .eyebrow {
+        font-size: 7px;
+        letter-spacing: 0.7px;
+    }
+
+    body.app-fullscreen .global-time .mini-button {
+        position: relative;
+        width: 28px;
+        min-height: 28px;
+        padding: 4px;
+        overflow: hidden;
+        font-size: 0;
+    }
+
+    body.app-fullscreen .global-time .mini-button::before {
+        content: "↺";
+        font-size: 15px;
+    }
+
+    body.app-fullscreen .presenter-header-center .status {
+        font-size: 9px;
+    }
+
+    body.app-fullscreen .status-dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    body.app-fullscreen .live-screen {
+        gap: 5px;
+        padding: 7px;
+        border-radius: 9px;
+    }
+
+    body.app-fullscreen .upcoming-panel {
+        min-height: 78px;
+        max-height: 94px;
+        padding: 5px 8px;
+    }
+
+    body.app-fullscreen .upcoming-content {
+        gap: 6px;
+    }
+
+    body.app-fullscreen .upcoming-panel strong {
+        font-size: clamp(14px, 4vw, 17px);
+        overflow-wrap: anywhere;
+    }
+
+    body.app-fullscreen .upcoming-panel strong.end-of-program {
+        font-size: 14px;
+    }
+
+    body.app-fullscreen .upcoming-duration {
+        font-size: clamp(19px, 6vw, 24px);
+    }
+
+    body.app-fullscreen .upcoming-panel.end-of-program .upcoming-duration {
+        font-size: 12px;
+    }
+
+    body.app-fullscreen .live-bottom {
+        grid-template-columns: minmax(76px, auto) minmax(0, 1fr) minmax(48px, auto);
+        gap: 7px;
+        padding: 1px 2px;
+    }
+
+    body.app-fullscreen .live-bottom .eyebrow {
+        font-size: 8px;
+        letter-spacing: 0.7px;
+    }
+
+    body.app-fullscreen #countdown {
+        font-size: clamp(25px, 7vw, 31px);
+    }
+
+    body.app-fullscreen .progress-track {
+        height: 8px;
+    }
+
+    body.app-fullscreen .queue-progress-label {
+        font-size: 9px;
+    }
+
+    body.app-fullscreen .fullscreen-speed-panel {
+        grid-template-columns: auto minmax(0, 1fr) auto auto;
+        gap: 6px;
+        min-height: 44px;
+        padding: 3px 6px;
+    }
+
+    body.app-fullscreen .fullscreen-speed-panel > .eyebrow {
+        font-size: 8px;
+        letter-spacing: 0.6px;
+    }
+
+    body.app-fullscreen .fullscreen-speed-panel input {
+        min-height: 38px;
+    }
+
+    body.app-fullscreen .fullscreen-speed-panel strong {
+        font-size: 14px;
+    }
+
+    body.app-fullscreen #fullscreenResetSpeed {
+        min-width: 68px;
+        min-height: 38px;
+        padding: 5px 6px;
+        font-size: 9px;
+    }
+
+    body.app-fullscreen .fullscreen-playback-controls {
+        gap: 5px;
+    }
+
+    body.app-fullscreen .fullscreen-playback-controls button {
+        min-height: 42px;
+        padding: 5px 3px;
+        font-size: 11px;
+    }
+}
+
+@media (max-height: 700px) {
+    body.app-fullscreen .presentation {
+        gap: 4px;
+    }
+
+    body.app-fullscreen .presentation-header {
+        min-height: 46px;
+    }
+
+    body.app-fullscreen .live-screen {
+        gap: 4px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    body.app-fullscreen .fullscreen-speed-panel {
+        min-height: 42px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    body.app-fullscreen .fullscreen-speed-panel input,
+    body.app-fullscreen #fullscreenResetSpeed {
+        min-height: 36px;
+    }
+
+    body.app-fullscreen .fullscreen-playback-controls button {
+        min-height: 40px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #countdown.is-warning {
+        animation: none;
+    }
+
+    body.app-fullscreen .live-screen.countdown-warning::before {
+        transition: none;
     }
 }

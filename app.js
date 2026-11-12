@@ -1,5 +1,7 @@
 
 const $ = id => document.getElementById(id);
+const DEFAULT_PROJECT_PATH = "projects/Katina%202026.json";
+const DEFAULT_PROJECT_NAME = "Katina 2026.json";
 
 function createBlankProject() {
     return {
@@ -29,6 +31,7 @@ let selectedScript = 0;
 let selectedCue = 0;
 
 let running = false;
+let paused = false;
 let elapsed = 0;
 let completed = false;
 let playbackAnchor = null;
@@ -38,11 +41,16 @@ let liveFontSize = 32;
 let displayedCueId = null;
 let activeProjectHandle = null;
 let projectLoaded = false;
+let bundledProjectLoaded = false;
 let projectDirty = false;
 let projectRevision = 0;
 let projectWriteQueue = Promise.resolve();
 let globalElapsedMs = 0;
 let globalElapsedStartedAt = null;
+let globalTimerInterval = null;
+let confirmationAction = null;
+let confirmationReturnFocus = null;
+let markerSidebarOpen = false;
 
 const typeNames = {
     drum: "DRUM PERFORMANCE",
@@ -221,8 +229,16 @@ function formatGlobalClock(valueMs) {
     const totalSeconds = Math.max(0, Math.floor(valueMs / 1000));
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
 
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function renderGlobalElapsed() {
+    const display = $("globalElapsedTime");
+    if (display) {
+        display.textContent = formatGlobalClock(getGlobalElapsedTime());
+    }
 }
 
 function getGlobalElapsedTime(now = performance.now()) {
@@ -232,6 +248,9 @@ function getGlobalElapsedTime(now = performance.now()) {
 
 function startGlobalTimer(now = performance.now()) {
     globalElapsedStartedAt = now;
+    if (globalTimerInterval !== null) clearInterval(globalTimerInterval);
+    globalTimerInterval = setInterval(renderGlobalElapsed, 250);
+    renderGlobalElapsed();
 }
 
 function pauseGlobalTimer(now = performance.now()) {
@@ -239,6 +258,11 @@ function pauseGlobalTimer(now = performance.now()) {
         globalElapsedMs += now - globalElapsedStartedAt;
         globalElapsedStartedAt = null;
     }
+    if (globalTimerInterval !== null) {
+        clearInterval(globalTimerInterval);
+        globalTimerInterval = null;
+    }
+    renderGlobalElapsed();
 }
 
 function resetGlobalTimer(now = performance.now()) {
@@ -248,6 +272,7 @@ function resetGlobalTimer(now = performance.now()) {
     } else {
         globalElapsedStartedAt = null;
     }
+    renderGlobalElapsed();
 }
 
 const supportsProjectFileAccess =
@@ -281,7 +306,7 @@ async function writeProjectFile(handle, requestPermission, data = project) {
     return write;
 }
 
-function exportProjectJson() {
+function exportProjectJson(fileName = bundledProjectLoaded ? DEFAULT_PROJECT_NAME : "project.json") {
     const blob = new Blob(
         [JSON.stringify(project, null, 2)],
         { type: "application/json;charset=utf-8" }
@@ -289,13 +314,17 @@ function exportProjectJson() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "project.json";
+    link.download = fileName;
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 async function saveConnectedProject() {
     if (!activeProjectHandle) {
+        if (bundledProjectLoaded) {
+            await saveProjectAs();
+            return;
+        }
         $("saveStatus").textContent = projectLoaded
             ? "No project file connected · use Save As"
             : "No project loaded";
@@ -335,7 +364,7 @@ async function saveProjectAs() {
 
     try {
         const handle = await window.showSaveFilePicker({
-            suggestedName: "project.json",
+            suggestedName: bundledProjectLoaded ? DEFAULT_PROJECT_NAME : "project.json",
             types: [{
                 description: "Katina Cue Studio project",
                 accept: { "application/json": [".json"] }
@@ -356,6 +385,7 @@ async function saveProjectAs() {
         await writeProjectFile(handle, false, projectToSave);
         if (project !== projectToSave) return;
         activeProjectHandle = handle;
+        bundledProjectLoaded = false;
         projectLoaded = true;
         if (projectRevision === revision) {
             projectDirty = false;
@@ -372,17 +402,17 @@ async function saveProjectAs() {
     }
 }
 
-async function loadProjectFile(file, handle = null) {
-    const parsed = JSON.parse(await file.text());
-    const validated = validateProject(parsed);
+function loadProjectData(data, fileName, handle = null, isBundledDefault = false) {
+    const validated = validateProject(data);
     if (
         projectDirty &&
-        !confirm(`Discard unsaved changes and open "${file.name}"?`)
+        !confirm(`Discard unsaved changes and open "${fileName}"?`)
     ) return false;
 
     stopPlayback();
     project = validated;
     activeProjectHandle = handle;
+    bundledProjectLoaded = isBundledDefault;
     projectLoaded = true;
     projectDirty = false;
     selectedScript = findScriptWithCue(0, 1);
@@ -395,11 +425,15 @@ async function loadProjectFile(file, handle = null) {
     renderAll();
 
     if (handle) {
-        $("saveStatus").textContent = `Loaded: ${file.name}`;
+        $("saveStatus").textContent = `Loaded: ${fileName}`;
     } else {
-        $("saveStatus").textContent = `Loaded: ${file.name} · use Save As to connect`;
+        $("saveStatus").textContent = `Loaded: ${fileName} · use Save As to connect`;
     }
     return true;
+}
+
+async function loadProjectFile(file, handle = null) {
+    return loadProjectData(JSON.parse(await file.text()), file.name, handle);
 }
 
 async function openProjectWithPicker() {
@@ -675,6 +709,7 @@ function renderLive() {
     const upcoming = $("upcomingPerformer");
     const upcomingDuration = $("upcomingDuration");
     const upcomingHint = $("upcomingHint");
+    const upcomingLabel = $("upcomingLabel");
     const nextColor = nextCue?.cue?.upcomingColor || null;
     if (nextColor) {
         upcomingPanel.style.background = nextColor;
@@ -682,6 +717,7 @@ function renderLive() {
         upcomingPanel.style.boxShadow = `inset 0 0 0 1px rgba(255,255,255,0.18)`;
         const isDarkText = ["#FDD835", "#FFFFFF"].includes(nextColor.toUpperCase());
         upcoming.style.color = isDarkText ? "#0f172a" : "#f8fbff";
+        upcomingLabel.style.color = isDarkText ? "#0f172a" : "#f8fbff";
         upcomingHint.style.color = isDarkText ? "rgba(15, 23, 42, 0.8)" : "rgba(248, 251, 255, 0.8)";
         upcomingDuration.style.color = isDarkText ? "rgba(15, 23, 42, 0.8)" : "rgba(248, 251, 255, 0.8)";
         upcomingPanel.classList.add("has-color");
@@ -690,6 +726,7 @@ function renderLive() {
         upcomingPanel.style.borderColor = "rgba(53, 197, 213, 0.5)";
         upcomingPanel.style.boxShadow = "none";
         upcoming.style.color = "";
+        upcomingLabel.style.color = "";
         upcomingHint.style.color = "";
         upcomingDuration.style.color = "";
         upcomingPanel.classList.remove("has-color");
@@ -698,9 +735,10 @@ function renderLive() {
         ? nextCue.cue.performer || "PERFORMER NOT SPECIFIED"
         : "END OF PROGRAM";
     upcoming.classList.toggle("end-of-program", !nextCue);
+    upcomingPanel.classList.toggle("end-of-program", !nextCue);
     upcomingDuration.textContent = nextCue
-        ? `Estimated duration: ${formatTime(nextCue.cue.duration)}`
-        : "No upcoming performance";
+        ? formatTime(nextCue.cue.duration)
+        : "—";
     upcomingHint.textContent = nextCue ? "Prepare to focus" : "Final cue";
 
     $("cuePosition").textContent =
@@ -716,20 +754,28 @@ function renderLive() {
 
     $("progressBar").style.width =
         `${Math.min(100, elapsed / cue.duration * 100)}%`;
+    const progressTrack = $("progressBar").parentElement;
+    progressTrack.setAttribute(
+        "aria-valuenow",
+        String(Math.round(Math.min(100, elapsed / cue.duration * 100)))
+    );
 
     const liveStatus = $("liveStatus");
     const liveStatusText = liveStatus.querySelector(".status-text");
     const statusRunning = running;
-    const statusLabel = statusRunning ? "LIVE" : completed ? "COMPLETE" : "READY";
+    const statusLabel = statusRunning
+        ? "LIVE"
+        : completed ? "COMPLETED" : paused ? "PAUSED" : "READY";
+    const playbackButtonLabel = statusRunning
+        ? "Ⅱ Pause"
+        : paused ? "▶ Resume" : completed ? "↺ Restart" : "▶ Start";
     liveStatus.classList.toggle("is-live", statusRunning);
     liveStatus.classList.toggle("complete", completed);
     liveStatusText.textContent = statusLabel;
-    $("playPause").textContent = running
-        ? "Ⅱ Pause"
-        : completed ? "↺ Replay" : "▶ Start";
+    $("playPause").textContent = playbackButtonLabel;
+    $("presenterPlayPause").textContent = playbackButtonLabel;
 
-    const globalElapsed = formatGlobalClock(getGlobalElapsedTime());
-    $("globalElapsedTime").textContent = globalElapsed;
+    renderGlobalElapsed();
     $("fullscreenSpeedValue").textContent = `${speed.toFixed(2)}×`;
     $("speedValue").textContent = `${speed.toFixed(2)}×`;
 }
@@ -739,20 +785,40 @@ function getCueDuration(cue) {
 }
 
 function updateCountdownWarning(countdown, remaining) {
-    const progress = remaining <= 5
-        ? Math.min(1, 0.015 + (5 - remaining) / 5 * 0.985)
+    const warningActive = remaining <= 5;
+    const warningProgress = warningActive
+        ? Math.min(1, Math.max(0, (5 - remaining) / 5))
+        : 0;
+    const intensity = warningActive
+        ? 0.08 + warningProgress * 0.92
+        : 0;
+    const colorProgress = warningActive
+        ? 0.12 + Math.sqrt(warningProgress) * 0.88
         : 0;
     const normal = [232, 240, 246];
     const warning = [255, 43, 55];
     const color = normal.map((channel, index) =>
-        Math.round(channel + (warning[index] - channel) * progress)
+        Math.round(channel + (warning[index] - channel) * colorProgress)
     );
-    const glow = progress * progress;
+    const glow = colorProgress * colorProgress;
+    const liveScreen = countdown.closest(".live-screen");
 
+    liveScreen.style.setProperty(
+        "--countdown-warning-intensity",
+        intensity.toFixed(3)
+    );
+    liveScreen.classList.toggle("countdown-warning", warningActive);
+    countdown.style.setProperty(
+        "--countdown-pulse-scale",
+        (1.008 + warningProgress * 0.047).toFixed(3)
+    );
     countdown.style.color = `rgb(${color.join(", ")})`;
-    countdown.style.textShadow = progress > 0
-        ? `0 0 ${4 + 16 * glow}px rgba(255, 35, 45, ${0.12 + 0.55 * glow}), 0 0 ${10 + 26 * glow}px rgba(255, 20, 35, ${0.05 + 0.35 * glow})`
+    countdown.style.textShadow = warningActive
+        ? `0 0 ${4 + 18 * glow}px rgba(255, 35, 45, ${0.12 + 0.58 * glow}), 0 0 ${10 + 28 * glow}px rgba(255, 20, 35, ${0.05 + 0.38 * glow})`
         : "none";
+    countdown.classList.toggle("is-warning", warningActive);
+    countdown.classList.toggle("is-running", running);
+    countdown.classList.toggle("is-completed", completed);
     countdown.classList.toggle("is-zero", remaining <= 0);
 }
 
@@ -764,32 +830,41 @@ function setLiveFontSize(size) {
 }
 
 function renderMarkers() {
-    const container = $("markerList");
-    container.innerHTML = "";
-
+    const containers = [$("markerList"), $("fullscreenMarkerList")].filter(Boolean);
     const markers = (currentScript()?.cues ?? [])
         .filter(cue => cue.marker)
         .sort((a, b) => Number(a.marker) - Number(b.marker));
 
-    markers.forEach(cue => {
-        const button = document.createElement("button");
+    containers.forEach(container => {
+        container.innerHTML = "";
+        markers.forEach(cue => {
+            const button = document.createElement("button");
+            const cueIndex = currentScript().cues.indexOf(cue);
+            const scriptIndex = selectedScript;
 
-        button.className = "marker";
-        button.innerHTML = `
-            <span class="marker-key">${cue.marker}</span>
-            <span></span>
-        `;
-
-        button.querySelector("span:last-child").textContent =
-            cue.text || "Saved cue";
-
-        button.onclick = () => jumpToCue(
-            selectedScript,
-            currentScript().cues.indexOf(cue)
-        );
-
-        container.appendChild(button);
+            button.className = "marker";
+            button.innerHTML = `
+                <span class="marker-key">${cue.marker}</span>
+                <span></span>
+            `;
+            button.querySelector("span:last-child").textContent =
+                cue.text || "Saved cue";
+            button.onclick = () => {
+                jumpToCue(scriptIndex, cueIndex);
+                if (window.matchMedia("(max-width: 850px)").matches) {
+                    setMarkerSidebarOpen(false);
+                }
+            };
+            container.appendChild(button);
+        });
     });
+}
+
+function setMarkerSidebarOpen(open) {
+    markerSidebarOpen = open;
+    document.body.classList.toggle("markers-open", open);
+    $("toggleMarkerSidebar").setAttribute("aria-expanded", String(open));
+    $("fullscreenMarkerSidebar").setAttribute("aria-hidden", String(!open));
 }
 
 function renderAll() {
@@ -823,6 +898,7 @@ function findFreeMarker() {
 
 function stopPlayback() {
     running = false;
+    paused = false;
     completed = false;
     playbackAnchor = null;
     pauseGlobalTimer(performance.now());
@@ -840,6 +916,7 @@ function pausePlayback() {
     if (!running) return;
 
     running = false;
+    paused = true;
     playbackAnchor = null;
     pauseGlobalTimer(performance.now());
 
@@ -851,15 +928,28 @@ function pausePlayback() {
     renderLive();
 }
 
+function resumePlayback() {
+    if (!paused || running || completed) return;
+
+    paused = false;
+    running = true;
+    playbackAnchor = performance.now();
+    startGlobalTimer(playbackAnchor);
+    renderLive();
+    schedulePlayback();
+}
+
 function startPlayback() {
-    if (!project.scripts.length) return;
+    if (running || !project.scripts.length) return;
 
     selectedScript = 0;
     selectedCue = 0;
     elapsed = 0;
+    paused = false;
     completed = false;
     renderScripts();
     renderEditor();
+    renderMarkers();
     globalElapsedMs = 0;
     startGlobalTimer(performance.now());
 
@@ -868,6 +958,16 @@ function startPlayback() {
 
     renderLive();
     schedulePlayback();
+}
+
+function togglePlayback() {
+    if (running) {
+        pausePlayback();
+    } else if (paused) {
+        resumePlayback();
+    } else {
+        startPlayback();
+    }
 }
 
 function schedulePlayback() {
@@ -928,6 +1028,7 @@ function advancePlaybackTo(now) {
     if (changedCue && selectedScript !== previousScript) {
         renderScripts();
         renderEditor();
+        renderMarkers();
     }
 
     renderLive();
@@ -976,6 +1077,7 @@ function moveCueWithinScript(index, direction) {
 
 function completeProgram() {
     running = false;
+    paused = false;
     completed = true;
     playbackAnchor = null;
     pauseGlobalTimer(performance.now());
@@ -1034,6 +1136,7 @@ function moveCue(direction) {
     if (selectedScript !== previousScript) {
         renderScripts();
         renderEditor();
+        renderMarkers();
     }
     renderLive();
     schedulePlayback();
@@ -1059,6 +1162,7 @@ function jumpToCue(scriptIndex, cueIndex) {
     if (selectedScript !== previousScript) {
         renderScripts();
         renderEditor();
+        renderMarkers();
     }
     renderLive();
     schedulePlayback();
@@ -1068,8 +1172,14 @@ let presenterModeFallback = false;
 
 function syncFullscreenState() {
     const isFullscreen = !!document.fullscreenElement || presenterModeFallback;
+    const wasFullscreen = document.body.classList.contains("app-fullscreen");
     document.body.classList.toggle("app-fullscreen", isFullscreen);
     $("toggleFullscreen").textContent = isFullscreen ? "Edit" : "Fullscreen";
+    if (isFullscreen && !wasFullscreen) {
+        setMarkerSidebarOpen(true);
+    } else if (!isFullscreen) {
+        setMarkerSidebarOpen(false);
+    }
 }
 
 async function toggleFullscreen() {
@@ -1101,16 +1211,17 @@ async function toggleFullscreen() {
 // BUTTONS
 
 $("playPause").onclick = () => {
-    if (running) {
-        pausePlayback();
-        return;
-    }
-
-    startPlayback();
+    togglePlayback();
 };
 
 $("nextCue").onclick = () => moveCue(1);
 $("previousCue").onclick = () => moveCue(-1);
+$("presenterPrevious").onclick = () => moveCue(-1);
+$("presenterPlayPause").onclick = togglePlayback;
+$("presenterNext").onclick = () => moveCue(1);
+$("toggleMarkerSidebar").onclick = () =>
+    setMarkerSidebarOpen(!markerSidebarOpen);
+$("closeMarkerSidebar").onclick = () => setMarkerSidebarOpen(false);
 
 $("restartCue").onclick = () => {
     const wasRunning = running;
@@ -1209,6 +1320,27 @@ $("scriptType").oninput = event => {
 
 // SPEED CONTROL
 
+function requestConfirmation(title, message, confirmLabel, action) {
+    confirmationAction = action;
+    confirmationReturnFocus = document.activeElement;
+    $("confirmationTitle").textContent = title;
+    $("confirmationMessage").textContent = message;
+    $("confirmConfirmation").textContent = confirmLabel;
+    $("confirmationDialog").hidden = false;
+    $("confirmConfirmation").focus();
+}
+
+function closeConfirmation(confirmed) {
+    const action = confirmationAction;
+    const returnFocus = confirmationReturnFocus;
+    confirmationAction = null;
+    confirmationReturnFocus = null;
+    $("confirmationDialog").hidden = true;
+
+    if (confirmed && action) action();
+    if (returnFocus?.isConnected) returnFocus.focus();
+}
+
 function setPlaybackSpeed(nextSpeed) {
     const now = performance.now();
     if (running) advancePlaybackTo(now);
@@ -1236,24 +1368,20 @@ $("fullscreenSpeedDial").oninput = event => {
     setPlaybackSpeed(1 + value / 100);
 };
 
-$("speedDial").onchange = event => {
-    event.target.value = 0;
-};
-
-$("fullscreenSpeedDial").onchange = event => {
-    event.target.value = 0;
-};
-
-$("resetSpeed").onclick = () => {
-    setPlaybackSpeed(1);
+function centerSpeedDials() {
     $("speedDial").value = 0;
     $("fullscreenSpeedDial").value = 0;
-};
+}
 
-$("fullscreenResetSpeed").onclick = () => {
-    setPlaybackSpeed(1);
-    $("speedDial").value = 0;
-    $("fullscreenSpeedDial").value = 0;
+$("speedDial").onchange = centerSpeedDials;
+$("fullscreenSpeedDial").onchange = centerSpeedDials;
+
+$("resetSpeed").onclick = () => setPlaybackSpeed(1);
+$("fullscreenResetSpeed").onclick = () => setPlaybackSpeed(1);
+$("cancelConfirmation").onclick = () => closeConfirmation(false);
+$("confirmConfirmation").onclick = () => closeConfirmation(true);
+$("confirmationDialog").onclick = event => {
+    if (event.target === $("confirmationDialog")) closeConfirmation(false);
 };
 
 $("liveFontSize").oninput = event => {
@@ -1272,21 +1400,28 @@ $("increaseLiveFont").onclick = () => {
 // KEYBOARD SHORTCUTS
 
 document.addEventListener("keydown", event => {
+    if (!$("confirmationDialog").hidden) {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            closeConfirmation(false);
+        }
+        return;
+    }
+
     if (["INPUT", "TEXTAREA", "SELECT"].includes(
         document.activeElement?.tagName
     )) return;
 
     if (event.code === "Space") {
         event.preventDefault();
-        running ? stopPlayback() : startPlayback();
+        togglePlayback();
     }
 
     if (event.key === "ArrowRight") moveCue(1);
     if (event.key === "ArrowLeft") moveCue(-1);
 
     if (event.key.toLowerCase() === "r") {
-        $("resetSpeed").click();
-        $("fullscreenResetSpeed").click();
+        setPlaybackSpeed(1);
     }
 
     if (event.key === "ArrowUp") {
@@ -1323,8 +1458,12 @@ document.addEventListener("keydown", event => {
 $("toggleFullscreen").onclick = toggleFullscreen;
 document.addEventListener("fullscreenchange", syncFullscreenState);
 $("globalReset").onclick = () => {
-    resetGlobalTimer(performance.now());
-    renderLive();
+    requestConfirmation(
+        "Reset Global Elapsed Time?",
+        "Are you sure you want to reset the total elapsed time to 00:00:00?",
+        "Confirm Reset",
+        () => resetGlobalTimer(performance.now())
+    );
 };
 
 
@@ -1338,6 +1477,7 @@ async function createNewProject() {
     stopPlayback();
     project = createBlankProject();
     activeProjectHandle = null;
+    bundledProjectLoaded = false;
     projectLoaded = true;
     selectedScript = 0;
     selectedCue = 0;
@@ -1389,5 +1529,33 @@ window.addEventListener("beforeunload", event => {
 
 // INITIALIZE
 
-renderAll();
-$("saveStatus").textContent = "No project loaded";
+async function initialize() {
+    renderAll();
+    $("saveStatus").textContent = `Loading ${DEFAULT_PROJECT_NAME}...`;
+
+    try {
+        const response = await fetch(
+            new URL(DEFAULT_PROJECT_PATH, document.baseURI)
+        );
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const loaded = loadProjectData(
+            await response.json(),
+            DEFAULT_PROJECT_NAME,
+            null,
+            true
+        );
+        if (!loaded) {
+            $("saveStatus").textContent =
+                `Could not load ${DEFAULT_PROJECT_NAME} · unsaved changes preserved`;
+        }
+    } catch (error) {
+        $("saveStatus").textContent =
+            `Default project failed to load · ${error.message}`;
+        console.error(`Could not load ${DEFAULT_PROJECT_NAME}.`, error);
+    }
+}
+
+initialize();

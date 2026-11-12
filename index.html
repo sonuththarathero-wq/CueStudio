@@ -54,12 +54,25 @@
     <section class="presentation">
 
         <div class="presentation-header">
-            <div>
+            <div class="presenter-heading">
                 <span class="eyebrow">LIVE DISPLAY</span>
                 <h2 id="liveScriptTitle">Opening Sequence</h2>
             </div>
 
+            <div class="presenter-header-center">
+                <div class="global-time">
+                    <span class="eyebrow">TIME SPENT</span>
+                    <strong id="globalElapsedTime">00:00:00</strong>
+                    <button id="globalReset" type="button" class="mini-button" aria-label="Reset global elapsed time" title="Reset global elapsed time">Reset time</button>
+                </div>
+                <div id="liveStatus" class="status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">READY</span>
+                </div>
+            </div>
+
             <div class="presentation-tools">
+                <button id="toggleMarkerSidebar" type="button" aria-controls="fullscreenMarkerSidebar" aria-expanded="false">Markers</button>
                 <button id="toggleFullscreen" type="button">Fullscreen</button>
                 <div class="live-font-control" aria-label="Live text font size">
                     <button id="decreaseLiveFont" type="button" aria-label="Decrease live text size">−</button>
@@ -75,14 +88,11 @@
                     <button id="increaseLiveFont" type="button" aria-label="Increase live text size">+</button>
                     <strong id="liveFontValue">32px</strong>
                 </div>
-            <div id="liveStatus" class="status">
-                <span class="status-dot"></span>
-                <span class="status-text">READY</span>
-            </div>
             </div>
         </div>
 
-        <div class="live-screen">
+        <div class="presenter-body">
+          <div class="live-screen">
 
             <div class="live-top">
                 <span id="liveType" class="type-label">DRUM PERFORMANCE</span>
@@ -103,21 +113,12 @@
             </div>
 
             <div id="upcomingPanel" class="upcoming-panel" aria-live="polite">
-                <span class="upcoming-label">UP NEXT</span>
-                <strong id="upcomingPerformer">END OF PROGRAM</strong>
-                <span id="upcomingDuration" class="upcoming-duration">No upcoming performance</span>
+                <span id="upcomingLabel" class="upcoming-label">UP NEXT</span>
+                <div class="upcoming-content">
+                    <strong id="upcomingPerformer">END OF PROGRAM</strong>
+                    <span id="upcomingDuration" class="upcoming-duration">No upcoming performance</span>
+                </div>
                 <span id="upcomingHint" class="upcoming-hint">Prepare to focus</span>
-            </div>
-
-            <div id="fullscreenSpeedPanel" class="fullscreen-speed-panel">
-                <div class="fullscreen-speed-header">
-                    <span class="eyebrow">PLAYBACK SPEED</span>
-                </div>
-                <div class="fullscreen-speed-row">
-                    <input id="fullscreenSpeedDial" type="range" min="-50" max="50" value="0" aria-label="Playback speed">
-                    <strong id="fullscreenSpeedValue">1.00×</strong>
-                    <button id="fullscreenResetSpeed" type="button" class="mini-button">Reset</button>
-                </div>
             </div>
 
             <div class="live-bottom">
@@ -126,23 +127,41 @@
                     <h2 id="countdown">00:10</h2>
                 </div>
 
-                <div class="global-timer-block">
-                    <span class="eyebrow">GLOBAL ELAPSED</span>
-                    <h2 id="globalElapsedTime">00:00</h2>
-                </div>
-
                 <div class="progress-area">
-                    <div class="progress-track">
+                    <div class="progress-track" role="progressbar" aria-label="Queue countdown progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                         <div id="progressBar"></div>
                     </div>
-                    <span id="elapsedTime">0s / 10s</span>
                 </div>
 
-                <button id="globalReset" type="button" class="mini-button" aria-label="Reset global elapsed timer">Reset clock</button>
+                <div id="elapsedTime" class="queue-progress-label">0s / 10s</div>
             </div>
 
+          </div>
+
+          <aside id="fullscreenMarkerSidebar" class="fullscreen-marker-sidebar" aria-label="Saved timing markers" aria-hidden="true">
+              <div class="fullscreen-marker-header">
+                  <div>
+                      <span class="eyebrow">QUICK RECOVERY</span>
+                      <h3>Saved markers</h3>
+                  </div>
+                  <button id="closeMarkerSidebar" type="button" class="icon-button" aria-label="Close saved markers">×</button>
+              </div>
+              <div id="fullscreenMarkerList" class="fullscreen-marker-list"></div>
+          </aside>
         </div>
 
+        <div class="fullscreen-speed-panel">
+            <span class="eyebrow">PLAYBACK SPEED</span>
+            <input id="fullscreenSpeedDial" type="range" min="-50" max="50" value="0" aria-label="Playback speed">
+            <strong id="fullscreenSpeedValue">1.00×</strong>
+            <button id="fullscreenResetSpeed" type="button" class="mini-button" aria-label="Reset playback speed">Reset speed</button>
+        </div>
+
+        <div class="fullscreen-playback-controls" aria-label="Playback controls">
+            <button id="presenterPrevious" type="button">← Previous</button>
+            <button id="presenterPlayPause" type="button" class="primary">▶ Start</button>
+            <button id="presenterNext" type="button">Next →</button>
+        </div>
 
         <!-- PLAYBACK CONTROLS -->
         <div class="control-panel">
@@ -246,6 +265,17 @@
     </aside>
 
 </main>
+
+<div id="confirmationDialog" class="confirmation-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirmationTitle" aria-describedby="confirmationMessage" hidden>
+    <div class="confirmation-card">
+        <h2 id="confirmationTitle">Reset Global Elapsed Time?</h2>
+        <p id="confirmationMessage">Are you sure you want to reset the total elapsed time to 00:00:00?</p>
+        <div class="confirmation-actions">
+            <button id="cancelConfirmation" type="button">Cancel</button>
+            <button id="confirmConfirmation" type="button" class="primary">Confirm Reset</button>
+        </div>
+    </div>
+</div>
 
 <footer>
     <span>Offline-first application · Cue Studio</span>
