@@ -25,7 +25,7 @@
     <nav class="mobile-navigation" aria-label="Mobile workspace navigation">
         <button id="mobileMenuToggle" type="button" aria-controls="scriptsPanel" aria-expanded="false" aria-label="Open scripts and project menu">☰</button>
         <button id="mobileMarkersToggle" type="button" aria-controls="markerPanel" aria-expanded="false">Markers</button>
-        <button id="mobileEditorToggle" type="button" aria-controls="editorPanel" aria-expanded="false">Edit</button>
+        <button id="mobileEditorToggle" type="button" aria-controls="editorPanel" aria-expanded="false">EXIT</button>
         <button id="mobileActionsToggle" type="button" aria-controls="projectControls" aria-expanded="false" aria-label="Open project actions">•••</button>
     </nav>
 
@@ -125,6 +125,11 @@
             </div>
 
             <div class="live-content">
+                 <div class="countdown-block">
+                    <span class="eyebrow">TIME REMAINING</span>
+                    <h2 id="countdown">00:10</h2>
+                </div>
+                <br><br><br><br><br><br><br><br>
                 <span class="current-performance-label">CURRENT PERFORMANCE</span>
                 <div id="livePerformer" class="performer">
                     Opening drum team
@@ -147,10 +152,7 @@
             </div>
 
             <div class="live-bottom">
-                <div class="countdown-block">
-                    <span class="eyebrow">TIME REMAINING</span>
-                    <h2 id="countdown">00:10</h2>
-                </div>
+               
 
                 <div class="progress-area">
                     <div class="progress-track" role="progressbar" aria-label="Queue countdown progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">

@@ -148,10 +148,10 @@ button.primary {
 }
 
 .eyebrow {
-    font-size: 9px;
+    font-size: 20px;
     color: var(--muted);
-    letter-spacing: 1.3px;
-    font-weight: 700;
+    letter-spacing: 1.5px;
+    font-weight: 900;
 }
 
 .icon-button {
@@ -467,8 +467,8 @@ button.primary {
 
 .current-performance-label {
     flex: 0 0 auto;
-    color: var(--muted);
-    font-size: 9px;
+    color: rgb(0, 213, 0);
+    font-size: 20px;
     letter-spacing: 1.5px;
     font-weight: 700;
     margin-bottom: 5px;
@@ -516,7 +516,7 @@ button.primary {
 }
 
 #countdown {
-    font-size: 26px;
+    font-size: 60px;
     margin: 5px 0;
     transform-origin: left center;
     transition: color 180ms ease, text-shadow 180ms ease;
@@ -579,7 +579,8 @@ button.primary {
 }
 
 .progress-area {
-    width: 38%;
+    /* width: 38%; */
+        width: 80%;
     text-align: right;
     color: var(--muted);
     font-size: 10px;
@@ -1018,7 +1019,7 @@ footer {
     }
 
     #countdown {
-        font-size: 20px;
+        font-size: 50px;
         margin: 0;
     }
 
@@ -1075,7 +1076,7 @@ footer {
     }
 
     #countdown {
-        font-size: 18px;
+        font-size: 30px;
     }
 }
 
@@ -1830,6 +1831,7 @@ body.app-fullscreen .progress-area {
 
 body.app-fullscreen .progress-track {
     height: 9px;
+    width: 500%;
     margin: 0;
 }
 
@@ -2102,6 +2104,7 @@ body.app-fullscreen .fullscreen-playback-controls button:disabled {
 
     body.app-fullscreen .progress-track {
         height: 8px;
+        width: 500%;
     }
 
     body.app-fullscreen .queue-progress-label {

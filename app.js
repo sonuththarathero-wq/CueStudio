@@ -1299,7 +1299,7 @@ function syncFullscreenState() {
     const isFullscreen = !!document.fullscreenElement || presenterModeFallback;
     const wasFullscreen = document.body.classList.contains("app-fullscreen");
     document.body.classList.toggle("app-fullscreen", isFullscreen);
-    $("toggleFullscreen").textContent = isFullscreen ? "Edit" : "Fullscreen";
+    $("toggleFullscreen").textContent = isFullscreen ? "EXIT" : "Fullscreen";
     if (isFullscreen && !wasFullscreen &&
         !window.matchMedia("(max-width: 700px)").matches) {
         setMarkerSidebarOpen(true);
