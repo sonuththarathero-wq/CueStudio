@@ -18,7 +18,22 @@
         </div>
     </div>
 
-    <div class="project-controls">
+    <div class="mobile-header-context" aria-live="polite">
+        <span id="mobileCurrentScript">Opening Sequence</span>
+    </div>
+
+    <nav class="mobile-navigation" aria-label="Mobile workspace navigation">
+        <button id="mobileMenuToggle" type="button" aria-controls="scriptsPanel" aria-expanded="false" aria-label="Open scripts and project menu">☰</button>
+        <button id="mobileMarkersToggle" type="button" aria-controls="markerPanel" aria-expanded="false">Markers</button>
+        <button id="mobileEditorToggle" type="button" aria-controls="editorPanel" aria-expanded="false">Edit</button>
+        <button id="mobileActionsToggle" type="button" aria-controls="projectControls" aria-expanded="false" aria-label="Open project actions">•••</button>
+    </nav>
+
+    <div id="projectControls" class="project-controls">
+        <div class="mobile-actions-heading">
+            <strong>Project actions</strong>
+            <button id="closeProjectActions" type="button" class="icon-button" aria-label="Close project actions">×</button>
+        </div>
         <span id="saveStatus">No project loaded</span>
         <button id="newProject">New Project</button>
         <button id="openProject">Open Project</button>
@@ -32,16 +47,25 @@
 <main class="workspace">
 
     <!-- LEFT: SCRIPT NAVIGATION -->
-    <aside class="panel scripts-panel">
+    <aside id="scriptsPanel" class="panel scripts-panel" aria-label="Scripts and project structure">
         <div class="panel-header">
             <div>
                 <span class="eyebrow">PROJECT STRUCTURE</span>
                 <h2>Scripts</h2>
             </div>
             <button id="addScript" class="icon-button">+</button>
+            <button id="closeScriptsDrawer" type="button" class="icon-button drawer-close" aria-label="Close scripts menu">×</button>
         </div>
 
         <div id="scriptList" class="script-list"></div>
+
+        <nav class="mobile-drawer-tools" aria-label="More Cue Studio tools">
+            <button id="drawerOpenMarkers" type="button">Recovery markers</button>
+            <button id="drawerOpenEditor" type="button">Script editor</button>
+            <button id="drawerOpenActions" type="button">Project actions</button>
+            <button id="drawerOpenSpeed" type="button">Playback speed</button>
+            <button id="drawerOpenTextSize" type="button">Live text size</button>
+        </nav>
 
         <div class="panel-footer">
             <span id="scriptCount">0 scripts</span>
@@ -51,9 +75,9 @@
 
 
     <!-- CENTRE: LIVE PRESENTATION -->
-    <section class="presentation">
+    <section id="presentation" class="presentation">
 
-        <div class="presentation-header">
+        <div id="presentationHeader" class="presentation-header">
             <div class="presenter-heading">
                 <span class="eyebrow">LIVE DISPLAY</span>
                 <h2 id="liveScriptTitle">Opening Sequence</h2>
@@ -73,26 +97,27 @@
 
             <div class="presentation-tools">
                 <button id="toggleMarkerSidebar" type="button" aria-controls="fullscreenMarkerSidebar" aria-expanded="false">Markers</button>
+                <button id="mobileLiveFontToggle" type="button" aria-expanded="false" aria-label="Show live text size control">Aa</button>
                 <button id="toggleFullscreen" type="button">Fullscreen</button>
                 <div class="live-font-control" aria-label="Live text font size">
                     <button id="decreaseLiveFont" type="button" aria-label="Decrease live text size">−</button>
                     <input
                         id="liveFontSize"
                         type="range"
-                        min="20"
-                        max="64"
+                        min="10"
+                        max="25"
                         step="1"
-                        value="32"
+                        value="18"
                         aria-label="Live text size"
                     >
                     <button id="increaseLiveFont" type="button" aria-label="Increase live text size">+</button>
-                    <strong id="liveFontValue">32px</strong>
+                    <strong id="liveFontValue">18px</strong>
                 </div>
             </div>
         </div>
 
         <div class="presenter-body">
-          <div class="live-screen">
+          <div id="live-screen" class="live-screen">
 
             <div class="live-top">
                 <span id="liveType" class="type-label">DRUM PERFORMANCE</span>
@@ -150,21 +175,22 @@
           </aside>
         </div>
 
-        <div class="fullscreen-speed-panel">
+        <div id="fullscreen-speed-panel" class="fullscreen-speed-panel">
             <span class="eyebrow">PLAYBACK SPEED</span>
+            <button id="toggleFullscreenSpeed" type="button" aria-expanded="false">Speed · 1.00×</button>
             <input id="fullscreenSpeedDial" type="range" min="-50" max="50" value="0" aria-label="Playback speed">
             <strong id="fullscreenSpeedValue">1.00×</strong>
             <button id="fullscreenResetSpeed" type="button" class="mini-button" aria-label="Reset playback speed">Reset speed</button>
         </div>
 
-        <div class="fullscreen-playback-controls" aria-label="Playback controls">
+        <div id="fullscreen-playback-controls" class="fullscreen-playback-controls" aria-label="Playback controls">
             <button id="presenterPrevious" type="button">← Previous</button>
             <button id="presenterPlayPause" type="button" class="primary">▶ Start</button>
             <button id="presenterNext" type="button">Next →</button>
         </div>
 
         <!-- PLAYBACK CONTROLS -->
-        <div class="control-panel">
+        <div id="control-panel" class="control-panel">
 
             <div class="transport">
                 <button id="previousCue">← Previous</button>
@@ -172,6 +198,8 @@
                 <button id="nextCue">Next →</button>
                 <button id="restartCue">↺ Restart</button>
             </div>
+
+            <button id="mobileSpeedToggle" type="button" aria-expanded="false">Playback speed · 1.00×</button>
 
             <div class="speed-control">
                 <div class="speed-heading">
@@ -201,12 +229,13 @@
 
 
         <!-- RECOVERY MARKERS -->
-        <div class="marker-panel">
+        <div id="markerPanel" class="marker-panel" aria-label="Saved timing markers">
             <div class="panel-header">
                 <div>
                     <span class="eyebrow">QUICK RECOVERY</span>
                     <h3>Saved timing markers</h3>
                 </div>
+                <button id="closeMarkerPanel" type="button" class="icon-button drawer-close" aria-label="Close saved timing markers">×</button>
             </div>
 
             <div id="markerList" class="marker-list"></div>
@@ -216,7 +245,7 @@
 
 
     <!-- RIGHT: SCRIPT EDITOR -->
-    <aside class="panel editor-panel">
+    <aside id="editorPanel" class="panel editor-panel" aria-label="Script editor">
 
         <div class="panel-header">
             <div>
@@ -227,29 +256,35 @@
             <button id="deleteScript" class="icon-button danger">
                 ×
             </button>
+            <button id="closeEditorDrawer" type="button" class="icon-button drawer-close" aria-label="Close script editor">×</button>
         </div>
 
         <div class="editor-content">
 
-            <label>
-                Project title
-                <input id="projectTitle" type="text">
-            </label>
+            <details class="project-info" open>
+                <summary>Project information</summary>
+                <div class="project-info-fields">
+                    <label>
+                        Project title
+                        <input id="projectTitle" type="text">
+                    </label>
 
-            <label>
-                Script title
-                <input id="scriptTitle" type="text">
-            </label>
+                    <label>
+                        Script title
+                        <input id="scriptTitle" type="text">
+                    </label>
 
-            <label>
-                Script type
-                <select id="scriptType">
-                    <option value="drum">Drum Performance</option>
-                    <option value="chant">Kavi</option>
-                    <option value="group">Everyone</option>
-                    <option value="custom">Custom Cue</option>
-                </select>
-            </label>
+                    <label>
+                        Script type
+                        <select id="scriptType">
+                            <option value="drum">Drum Performance</option>
+                            <option value="chant">Kavi</option>
+                            <option value="group">Everyone</option>
+                            <option value="custom">Custom Cue</option>
+                        </select>
+                    </label>
+                </div>
+            </details>
 
             <div class="editor-divider"></div>
 
@@ -265,6 +300,8 @@
     </aside>
 
 </main>
+
+<button id="mobileDrawerBackdrop" class="mobile-drawer-backdrop" type="button" aria-label="Close open panel" tabindex="-1" hidden></button>
 
 <div id="confirmationDialog" class="confirmation-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirmationTitle" aria-describedby="confirmationMessage" hidden>
     <div class="confirmation-card">

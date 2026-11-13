@@ -37,7 +37,7 @@ let completed = false;
 let playbackAnchor = null;
 let speed = 1;
 let animationFrame = null;
-let liveFontSize = 32;
+let liveFontSize = 18;
 let displayedCueId = null;
 let activeProjectHandle = null;
 let projectLoaded = false;
@@ -51,6 +51,9 @@ let globalTimerInterval = null;
 let confirmationAction = null;
 let confirmationReturnFocus = null;
 let markerSidebarOpen = false;
+let activeMobileDrawer = null;
+let projectInfoTouched = false;
+let wasMobileLayout = window.matchMedia("(max-width: 700px)").matches;
 
 const typeNames = {
     drum: "DRUM PERFORMANCE",
@@ -495,6 +498,7 @@ function renderScripts() {
             selectedCue = 0;
             stopPlayback();
             elapsed = 0;
+            closeMobileDrawers();
             renderAll();
         });
 
@@ -697,6 +701,7 @@ function renderLive() {
     }
 
     $("liveScriptTitle").textContent = script.title;
+    $("mobileCurrentScript").textContent = script.title;
     $("liveType").textContent = typeNames[script.type] || "CUSTOM CUE";
 
     $("livePerformer").textContent = cue.performer || "";
@@ -777,7 +782,13 @@ function renderLive() {
 
     renderGlobalElapsed();
     $("fullscreenSpeedValue").textContent = `${speed.toFixed(2)}×`;
+    $("toggleFullscreenSpeed").textContent = `Speed · ${speed.toFixed(2)}×`;
     $("speedValue").textContent = `${speed.toFixed(2)}×`;
+    $("mobileSpeedToggle").textContent =
+        `Playback speed · ${speed.toFixed(2)}×`;
+    const speedControlsOpen = document.body.classList.contains("mobile-speed-open");
+    $("mobileSpeedToggle").setAttribute("aria-expanded", String(speedControlsOpen));
+    $("toggleFullscreenSpeed").setAttribute("aria-expanded", String(speedControlsOpen));
 }
 
 function getCueDuration(cue) {
@@ -823,7 +834,7 @@ function updateCountdownWarning(countdown, remaining) {
 }
 
 function setLiveFontSize(size) {
-    liveFontSize = Math.max(20, Math.min(64, size));
+    liveFontSize = Math.max(10, Math.min(25, size));
     $("liveFontSize").value = liveFontSize;
     $("liveFontValue").textContent = `${liveFontSize}px`;
     $("liveText").style.fontSize = `${liveFontSize}px`;
@@ -861,10 +872,124 @@ function renderMarkers() {
 }
 
 function setMarkerSidebarOpen(open) {
+    const wasOpen = markerSidebarOpen;
     markerSidebarOpen = open;
     document.body.classList.toggle("markers-open", open);
     $("toggleMarkerSidebar").setAttribute("aria-expanded", String(open));
+    $("mobileMarkersToggle").setAttribute("aria-expanded", String(open));
     $("fullscreenMarkerSidebar").setAttribute("aria-hidden", String(!open));
+    $("markerPanel").setAttribute(
+        "aria-hidden",
+        String(window.matchMedia("(max-width: 700px)").matches && !open)
+    );
+    if (window.matchMedia("(max-width: 700px)").matches) {
+        if (open) {
+            activeMobileDrawer = "markers";
+            $("mobileDrawerBackdrop").hidden = false;
+        } else if (activeMobileDrawer === "markers") {
+            activeMobileDrawer = null;
+            $("mobileDrawerBackdrop").hidden = true;
+        }
+        syncMobileDrawerInertState();
+        if (open) {
+            const closeButton = $(document.body.classList.contains("app-fullscreen")
+                ? "closeMarkerSidebar"
+                : "closeMarkerPanel");
+            requestAnimationFrame(() => {
+                if (markerSidebarOpen) closeButton.focus();
+            });
+        } else if (wasOpen) {
+            $(document.body.classList.contains("app-fullscreen")
+                ? "toggleMarkerSidebar"
+                : "mobileMarkersToggle").focus();
+        }
+    }
+}
+
+function closeMobileDrawers() {
+    const previousDrawer = activeMobileDrawer;
+    setMarkerSidebarOpen(false);
+    ["scripts", "editor", "actions"].forEach(name => {
+        document.body.classList.remove(`mobile-${name}-open`);
+        const button = name === "scripts"
+            ? $("mobileMenuToggle")
+            : $(`mobile${name[0].toUpperCase()}${name.slice(1)}Toggle`);
+        if (button) button.setAttribute("aria-expanded", "false");
+    });
+    activeMobileDrawer = null;
+    $("mobileDrawerBackdrop").hidden = true;
+    syncMobileDrawerInertState();
+    const returnFocus = previousDrawer === "scripts"
+        ? $("mobileMenuToggle")
+        : previousDrawer === "editor"
+            ? $("mobileEditorToggle")
+            : previousDrawer === "actions"
+                ? $("mobileActionsToggle")
+                : previousDrawer === "markers"
+                ? $(document.body.classList.contains("app-fullscreen")
+                    ? "toggleMarkerSidebar"
+                    : "mobileMarkersToggle")
+                    : null;
+    returnFocus?.focus();
+}
+
+function setMobileSpeedControlsOpen(open) {
+    document.body.classList.toggle("mobile-speed-open", open);
+    $("mobileSpeedToggle").setAttribute("aria-expanded", String(open));
+    $("toggleFullscreenSpeed").setAttribute("aria-expanded", String(open));
+}
+
+function setMobileLiveFontControlOpen(open) {
+    document.body.classList.toggle("mobile-live-font-open", open);
+    $("mobileLiveFontToggle").setAttribute("aria-expanded", String(open));
+}
+
+function openMobileDrawer(name) {
+    if (activeMobileDrawer === name) {
+        closeMobileDrawers();
+        return;
+    }
+
+    closeMobileDrawers();
+    activeMobileDrawer = name;
+    document.body.classList.add(`mobile-${name}-open`);
+    const button = name === "scripts"
+        ? $("mobileMenuToggle")
+        : $(`mobile${name[0].toUpperCase()}${name.slice(1)}Toggle`);
+    if (button) button.setAttribute("aria-expanded", "true");
+    $("mobileDrawerBackdrop").hidden = false;
+    syncMobileDrawerInertState();
+    const closeButton = $(name === "scripts"
+        ? "closeScriptsDrawer"
+        : name === "editor"
+            ? "closeEditorDrawer"
+            : "closeProjectActions");
+    requestAnimationFrame(() => {
+        if (activeMobileDrawer === name) closeButton.focus();
+    });
+}
+
+function syncMobileDrawerInertState() {
+    const isMobile = window.matchMedia("(max-width: 700px)").matches;
+    $("scriptsPanel").inert = isMobile && activeMobileDrawer !== "scripts";
+    $("editorPanel").inert = isMobile && activeMobileDrawer !== "editor";
+    document.querySelector(".mobile-navigation").inert =
+        isMobile && activeMobileDrawer !== null;
+    $("presentation").inert = isMobile &&
+        activeMobileDrawer !== null && activeMobileDrawer !== "markers";
+    $("presentationHeader").inert =
+        isMobile && activeMobileDrawer === "markers";
+    $("projectControls").inert = isMobile && activeMobileDrawer !== "actions";
+    $("markerPanel").inert = isMobile && activeMobileDrawer !== "markers";
+    $("fullscreenMarkerSidebar").inert =
+        isMobile && activeMobileDrawer !== "markers";
+    $("live-screen").inert = isMobile && activeMobileDrawer === "markers";
+    $("control-panel").inert =
+        isMobile && activeMobileDrawer === "markers";
+    $("fullscreen-speed-panel").inert =
+        isMobile && activeMobileDrawer === "markers";
+    $("fullscreen-playback-controls").inert =
+        isMobile && activeMobileDrawer === "markers";
 }
 
 function renderAll() {
@@ -1175,9 +1300,12 @@ function syncFullscreenState() {
     const wasFullscreen = document.body.classList.contains("app-fullscreen");
     document.body.classList.toggle("app-fullscreen", isFullscreen);
     $("toggleFullscreen").textContent = isFullscreen ? "Edit" : "Fullscreen";
-    if (isFullscreen && !wasFullscreen) {
+    if (isFullscreen && !wasFullscreen &&
+        !window.matchMedia("(max-width: 700px)").matches) {
         setMarkerSidebarOpen(true);
     } else if (!isFullscreen) {
+        setMarkerSidebarOpen(false);
+    } else {
         setMarkerSidebarOpen(false);
     }
 }
@@ -1222,6 +1350,60 @@ $("presenterNext").onclick = () => moveCue(1);
 $("toggleMarkerSidebar").onclick = () =>
     setMarkerSidebarOpen(!markerSidebarOpen);
 $("closeMarkerSidebar").onclick = () => setMarkerSidebarOpen(false);
+$("mobileMenuToggle").onclick = () => openMobileDrawer("scripts");
+$("mobileEditorToggle").onclick = () => openMobileDrawer("editor");
+$("mobileActionsToggle").onclick = () => openMobileDrawer("actions");
+$("mobileMarkersToggle").onclick = () =>
+    setMarkerSidebarOpen(!markerSidebarOpen);
+$("drawerOpenMarkers").onclick = () => {
+    closeMobileDrawers();
+    setMarkerSidebarOpen(true);
+};
+$("drawerOpenEditor").onclick = () => openMobileDrawer("editor");
+$("drawerOpenActions").onclick = () => openMobileDrawer("actions");
+$("drawerOpenSpeed").onclick = () => {
+    closeMobileDrawers();
+    setMobileSpeedControlsOpen(true);
+};
+$("drawerOpenTextSize").onclick = () => {
+    closeMobileDrawers();
+    setMobileLiveFontControlOpen(true);
+};
+$("closeScriptsDrawer").onclick = closeMobileDrawers;
+$("closeEditorDrawer").onclick = closeMobileDrawers;
+$("closeProjectActions").onclick = closeMobileDrawers;
+$("closeMarkerPanel").onclick = () => setMarkerSidebarOpen(false);
+$("mobileDrawerBackdrop").onclick = closeMobileDrawers;
+$("mobileLiveFontToggle").onclick = () => {
+    setMobileLiveFontControlOpen(
+        !document.body.classList.contains("mobile-live-font-open")
+    );
+};
+$("mobileSpeedToggle").onclick = () => {
+    setMobileSpeedControlsOpen(
+        !document.body.classList.contains("mobile-speed-open")
+    );
+};
+$("toggleFullscreenSpeed").onclick = () => {
+    setMobileSpeedControlsOpen(
+        !document.body.classList.contains("mobile-speed-open")
+    );
+};
+window.addEventListener("resize", () => {
+    const isMobile = window.matchMedia("(max-width: 700px)").matches;
+    if (isMobile !== wasMobileLayout) {
+        if (!projectInfoTouched) {
+            document.querySelector(".project-info").open = !isMobile;
+        }
+        wasMobileLayout = isMobile;
+    }
+
+    if (!isMobile) {
+        closeMobileDrawers();
+    } else {
+        syncMobileDrawerInertState();
+    }
+});
 
 $("restartCue").onclick = () => {
     const wasRunning = running;
@@ -1408,6 +1590,11 @@ document.addEventListener("keydown", event => {
         return;
     }
 
+    if (event.key === "Escape" && activeMobileDrawer !== null) {
+        closeMobileDrawers();
+        return;
+    }
+
     if (["INPUT", "TEXTAREA", "SELECT"].includes(
         document.activeElement?.tagName
     )) return;
@@ -1530,6 +1717,16 @@ window.addEventListener("beforeunload", event => {
 // INITIALIZE
 
 async function initialize() {
+    document.querySelector(".project-info > summary").addEventListener(
+        "click",
+        () => {
+            projectInfoTouched = true;
+        }
+    );
+    if (window.matchMedia("(max-width: 700px)").matches) {
+        document.querySelector(".project-info").removeAttribute("open");
+    }
+    setMarkerSidebarOpen(false);
     renderAll();
     $("saveStatus").textContent = `Loading ${DEFAULT_PROJECT_NAME}...`;
 
