@@ -104,6 +104,25 @@ button.primary {
     gap: 9px;
 }
 
+.project-controls .export-pdf-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-color: var(--accent);
+    color: #baf7fb;
+    font-weight: 700;
+}
+
+.export-pdf-button svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
 #saveStatus {
     font-size: 10px;
     color: var(--muted);

@@ -322,6 +322,271 @@ function exportProjectJson(fileName = bundledProjectLoaded ? DEFAULT_PROJECT_NAM
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function exportPerformanceRunSheet() {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+        alert("The run sheet could not be opened. Allow pop-ups for Cue Studio and try again.");
+        return;
+    }
+
+    const performances = project.scripts.flatMap(script => script.cues);
+    const formatElapsed = seconds => {
+        const total = Math.ceil(seconds);
+        const hours = Math.floor(total / 3600);
+        const minutes = Math.floor((total % 3600) / 60);
+        const remaining = total % 60;
+        return [hours, minutes, remaining]
+            .map(value => String(value).padStart(2, "0"))
+            .join(":");
+    };
+    const formatDuration = seconds => {
+        const total = Math.ceil(seconds);
+        if (total >= 3600) return formatElapsed(total);
+        return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+    };
+    const durations = performances.map(cue => {
+        const duration = Number(cue.duration);
+        return Number.isFinite(duration) && duration > 0
+            ? Math.ceil(duration)
+            : null;
+    });
+    const totalDuration = durations.every(duration => duration !== null)
+        ? durations.reduce((total, duration) => total + duration, 0)
+        : null;
+    const exportedAt = new Intl.DateTimeFormat(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short"
+    }).format(new Date());
+    const safeProjectTitle = project.title.trim() || "Untitled Project";
+    const fileTitle = `${safeProjectTitle} - Cue Studio Performance Run Sheet`;
+    const document = printWindow.document;
+    document.open();
+    document.write(`<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="${new URL(".", window.location.href).href}">
+    <title></title>
+    <style>
+        @font-face {
+            font-family: "Noto Sinhala";
+            src: url("${new URL("assets/fonts/NotoSansSinhala.ttf", window.location.href).href}") format("truetype");
+            font-display: swap;
+        }
+        @page {
+            size: A4 landscape;
+            margin: 14mm 12mm 17mm;
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                color: #59636e;
+                font: 8pt Arial, sans-serif;
+            }
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            color: #17212b;
+            background: #fff;
+            font: 9pt Arial, "Noto Sinhala", sans-serif;
+            line-height: 1.35;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0 0 14px;
+        }
+        .toolbar button {
+            border: 0;
+            border-radius: 4px;
+            padding: 9px 14px;
+            color: #071b22;
+            background: #35c5d5;
+            font: 700 10pt Arial, sans-serif;
+            cursor: pointer;
+        }
+        .run-sheet-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #203448;
+        }
+        .branding {
+            margin: 0 0 4px;
+            color: #176b78;
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 1.1px;
+        }
+        h1 {
+            margin: 0;
+            color: #17212b;
+            font-size: 18pt;
+            line-height: 1.2;
+        }
+        .project-name {
+            margin: 5px 0 0;
+            color: #354657;
+            font-size: 12pt;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+        .export-details {
+            flex: 0 0 auto;
+            color: #465361;
+            font-size: 8.5pt;
+            text-align: right;
+        }
+        .export-details p { margin: 3px 0; }
+        .summary {
+            display: flex;
+            gap: 25px;
+            margin: 0 0 10px;
+            color: #354657;
+            font-size: 9pt;
+        }
+        .summary strong { color: #17212b; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        col.number { width: 4%; }
+        col.content { width: 50%; }
+        col.performance { width: 18%; }
+        col.duration { width: 9%; }
+        col.start, col.finish { width: 9.5%; }
+        thead { display: table-header-group; }
+        th, td {
+            padding: 6px 7px;
+            border: 1px solid #c9d0d6;
+            text-align: left;
+            vertical-align: top;
+            overflow-wrap: anywhere;
+        }
+        th {
+            color: #fff;
+            background: #26394b;
+            font-size: 8.5pt;
+            font-weight: 700;
+        }
+        tbody tr:nth-child(even) { background: #f0f2f4; }
+        tbody tr { break-inside: avoid; page-break-inside: avoid; }
+        td.number, td.duration, td.start, td.finish {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        td.number { color: #4a5967; }
+        td.content { white-space: pre-wrap; }
+        td.performance { font-weight: 700; }
+        td.start, td.finish { color: #1d4054; font-weight: 700; }
+        .undetermined { color: #6a4b20 !important; font-weight: 700; }
+        .empty-row { color: #59636e; font-style: italic; text-align: center; }
+        @media screen {
+            body { max-width: 297mm; margin: 24px auto; padding: 0 24px; }
+        }
+        @media print {
+            .toolbar { display: none; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar"><button type="button" id="printRunSheet">Print / Save as PDF</button></div>
+    <header class="run-sheet-header">
+        <div>
+            <p class="branding">CUE STUDIO</p>
+            <h1>PERFORMANCE RUN SHEET</h1>
+            <p class="project-name"></p>
+        </div>
+        <div class="export-details">
+            <p class="export-date"></p>
+            <p class="export-counts"></p>
+        </div>
+    </header>
+    <p class="summary"></p>
+    <table>
+        <colgroup>
+            <col class="number"><col class="content"><col class="performance">
+            <col class="duration"><col class="start"><col class="finish">
+        </colgroup>
+        <thead><tr>
+            <th>No.</th>
+            <th>Queue Content / Signal Instructions</th>
+            <th>Performance / Queue</th>
+            <th>Duration</th>
+            <th>Start Time</th>
+            <th>Finish Time</th>
+        </tr></thead>
+        <tbody></tbody>
+    </table>
+</body>
+</html>`);
+    document.close();
+    document.title = fileTitle;
+    document.querySelector(".project-name").textContent = safeProjectTitle;
+    document.querySelector(".export-date").textContent = `Exported: ${exportedAt}`;
+    document.querySelector(".export-counts").textContent =
+        `${project.scripts.length} scripts · ${performances.length} performances`;
+    document.querySelector(".summary").innerHTML =
+        `<strong>Total estimated running time:</strong> ${totalDuration === null ? '<span class="undetermined">Undetermined</span>' : formatElapsed(totalDuration)}`;
+
+    const tableBody = document.querySelector("tbody");
+    if (!performances.length) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 6;
+        cell.className = "empty-row";
+        cell.textContent = "No performances in this project.";
+        row.appendChild(cell);
+        tableBody.appendChild(row);
+    }
+
+    let elapsedTime = 0;
+    performances.forEach((cue, index) => {
+        const duration = durations[index];
+        const start = elapsedTime === null ? null : elapsedTime;
+        const finish = start === null || duration === null
+            ? null
+            : start + duration;
+        const row = document.createElement("tr");
+        const values = [
+            String(index + 1).padStart(2, "0"),
+            cue.text?.trim() ? cue.text : "No instructions provided",
+            cue.performer?.trim() || "Not named",
+            duration === null ? "Not set" : formatDuration(duration),
+            start === null ? "Undetermined" : formatElapsed(start),
+            finish === null ? "Undetermined" : formatElapsed(finish)
+        ];
+
+        values.forEach((value, cellIndex) => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            if (cellIndex === 0) cell.className = "number";
+            if (cellIndex === 1) cell.className = "content";
+            if (cellIndex === 2) cell.className = "performance";
+            if (cellIndex === 3) cell.className = "duration";
+            if (cellIndex === 4) cell.className = "start";
+            if (cellIndex === 5) cell.className = "finish";
+            if (value === "Undetermined" || value === "Not set") {
+                cell.classList.add("undetermined");
+            }
+            row.appendChild(cell);
+        });
+        tableBody.appendChild(row);
+        elapsedTime = finish;
+    });
+
+    document.getElementById("printRunSheet").addEventListener("click", () => printWindow.print());
+    document.fonts.ready.then(() => {
+        printWindow.focus();
+        printWindow.print();
+    });
+}
+
 async function saveConnectedProject() {
     if (!activeProjectHandle) {
         if (bundledProjectLoaded) {
@@ -1685,6 +1950,7 @@ $("exportProject").onclick = () => {
         ? "Exported JSON · unsaved changes"
         : "Exported JSON backup";
 };
+$("exportRunSheet").onclick = exportPerformanceRunSheet;
 
 $("openProject").onclick = openProjectWithPicker;
 $("newProject").onclick = createNewProject;
